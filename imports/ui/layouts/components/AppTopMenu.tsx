@@ -1,5 +1,5 @@
-import { AccountCircle } from '@mui/icons-material';
-import { Box, Button, Container, Menu } from '@mui/material';
+import PersonIcon from '@mui/icons-material/Person';
+import { Box, Button, Container, Menu, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DayNightToggle } from './DayNightToggle';
@@ -8,6 +8,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import MenuItem from '@mui/material/MenuItem';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { appTopMenuStyle } from './AppTopMenuStyle';
+import { secondary } from '/imports/materialui/styles';
 
 export const AppTopMenu = (props: ILayoutProps) => {
 	const { user, showDrawer, showWindow, theme, themeOptions } = props;
@@ -40,86 +41,31 @@ export const AppTopMenu = (props: ILayoutProps) => {
 	};
 
 	return (
-		<Box sx={{ width: '100%', backgroundColor: '#d5d5d5' }}>
-			<Container
-				sx={{
-					width: '100%',
-					display: 'flex',
-					flexDirection: 'row',
-					justifyContent: 'space-between',
-					alignItems: 'center',
-					height: 40,
-					maxHeight: 40
-				}}>
-				<Box
-					sx={{
-						display: 'flex',
-						flexDirection: 'row',
-						alignItems: 'center',
-						justifyContent: 'center'
-					}}>
-					<DayNightToggle
-						isDarkMode={themeOptions?.isDarkThemeMode as boolean}
-						setDarkMode={(evt) => {
-							themeOptions?.setDarkThemeMode(evt.target.checked);
-						}}
-					/>
-					<Box
-						sx={{
-							display: 'flex',
-							flexDirection: 'row',
-							alignItems: 'center',
-							border: '1px solid #CCC',
-							color: theme.palette.primary.main
-						}}>
-						<Button
-							variant={'contained'}
-							color={'secondary'}
-							sx={{
-								minWidth: 15,
-								minHeight: 15,
-								width: 15,
-								height: 15,
-								maxWidth: 15,
-								maxHeight: 15
-							}}
-							onClick={() => themeOptions?.setFontScale(themeOptions?.fontScale * 0.85)}>
-							{'-'}
-						</Button>
-						{'F'}
-						<Button
-							variant={'contained'}
-							color={'secondary'}
-							sx={{
-								minWidth: 15,
-								minHeight: 15,
-								width: 15,
-								height: 15,
-								maxWidth: 15,
-								maxHeight: 15
-							}}
-							onClick={() => themeOptions?.setFontScale(themeOptions?.fontScale * 1.15)}>
-							{'+'}
-						</Button>
-					</Box>
-				</Box>
+		<Box sx={appTopMenuStyle.mainContainer}>
+			<Container sx={appTopMenuStyle.contentTopMenu}>
+				<Typography sx={appTopMenuStyle.titleContentTopMenu}>ToDo List</Typography>
 				<Button
 					aria-label="account of current user"
 					aria-controls="menu-appbar"
-					aria-haspopup="true"
 					onClick={handleMenu}
-					color="inherit"
 					id="Perfil"
-					sx={appTopMenuStyle.containerAccountCircle}>
-					<>
-						<AccountCircle id="Perfil" name="Perfil" style={appTopMenuStyle.accountCircle} />
-						<ArrowDropDownIcon
-							style={{
-								color: theme.palette.primary.main,
-								width: 17
-							}}
-						/>
-					</>
+					sx={{
+						'&:hover': {
+							color: '#979797',
+							backgroundColor: '#979797'
+						},
+						'&:active': {
+							color: '#979797',
+							backgroundColor: '#979797'
+						}
+					}}>
+					<PersonIcon fontSize="large" id="Perfil" name="Perfil" style={appTopMenuStyle.accountCircle} />
+					<ArrowDropDownIcon
+						style={{
+							color: 'rgba(0, 0, 0, 0.6)',
+							width: 20
+						}}
+					/>
 				</Button>
 				<Menu
 					id="menu-appbar"
@@ -137,18 +83,18 @@ export const AppTopMenu = (props: ILayoutProps) => {
 					onClose={handleClose}>
 					{!user || !user._id
 						? [
-								<MenuItem key={'signin'} onClick={openPage('/signin')}>
+								<MenuItem sx={appTopMenuStyle.optionsAccountCircle} key={'signin'} onClick={openPage('/signin')}>
 									Entrar
 								</MenuItem>
-						  ]
+							]
 						: [
-								<MenuItem key={'userprofile'} onClick={viewProfile}>
+								<MenuItem sx={appTopMenuStyle.optionsAccountCircle} key={'userprofile'} onClick={viewProfile}>
 									{user.username || 'Editar'}
 								</MenuItem>,
-								<MenuItem key={'signout'} onClick={openPage('/signout')}>
+								<MenuItem sx={appTopMenuStyle.optionsAccountCircle} key={'signout'} onClick={openPage('/signout')}>
 									<ExitToAppIcon fontSize="small" /> Sair
 								</MenuItem>
-						  ]}
+							]}
 				</Menu>
 			</Container>
 		</Box>

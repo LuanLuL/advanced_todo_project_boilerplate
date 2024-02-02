@@ -1,6 +1,6 @@
 import React from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
-import { exampleApi } from '../../api/exampleApi';
+import { taskApi } from '../../api/taskApi';
 import SimpleForm from '../../../../ui/components/SimpleForm/SimpleForm';
 import Button from '@mui/material/Button';
 import FormGroup from '@mui/material/FormGroup';
@@ -16,23 +16,22 @@ import ImageCompactField from '/imports/ui/components/SimpleFormFields/ImageComp
 import Print from '@mui/icons-material/Print';
 import Close from '@mui/icons-material/Close';
 import { PageLayout } from '../../../../ui/layouts/PageLayout';
-import { IExample } from '../../api/exampleSch';
+import { ITask } from '../../api/taskSch';
 import { IDefaultContainerProps, IDefaultDetailProps, IMeteorError } from '/imports/typings/BoilerplateDefaultTypings';
 import { useTheme } from '@mui/material/styles';
 import { showLoading } from '/imports/ui/components/Loading/Loading';
-import ColorPicker from '/imports/ui/components/SimpleFormFields/ColorPicker/ColorPicker';
 
-interface IExampleDetail extends IDefaultDetailProps {
-	exampleDoc: IExample;
-	save: (doc: IExample, _callback?: any) => void;
+interface ITaskDetail extends IDefaultDetailProps {
+	taskDoc: ITask;
+	save: (doc: ITask, _callback?: any) => void;
 }
 
-const ExampleDetail = (props: IExampleDetail) => {
-	const { isPrintView, screenState, loading, exampleDoc, save, navigate } = props;
+const TaskDetail = (props: ITaskDetail) => {
+	const { isPrintView, screenState, loading, taskDoc, save, navigate } = props;
 
 	const theme = useTheme();
 
-	const handleSubmit = (doc: IExample) => {
+	const handleSubmit = (doc: ITask) => {
 		save(doc);
 	};
 
@@ -42,7 +41,7 @@ const ExampleDetail = (props: IExampleDetail) => {
 			title={
 				screenState === 'view' ? 'Visualizar exemplo' : screenState === 'edit' ? 'Editar Exemplo' : 'Criar exemplo'
 			}
-			onBack={() => navigate('/example')}
+			onBack={() => navigate('/task')}
 			actions={[
 				!isPrintView ? (
 					<span
@@ -53,7 +52,7 @@ const ExampleDetail = (props: IExampleDetail) => {
 							color: theme.palette.secondary.main
 						}}
 						onClick={() => {
-							navigate(`/example/printview/${exampleDoc._id}`);
+							navigate(`/task/printview/${taskDoc._id}`);
 						}}>
 						<Print key={'ExempleDetail-spanPrintKEY'} />
 					</span>
@@ -66,7 +65,7 @@ const ExampleDetail = (props: IExampleDetail) => {
 							color: theme.palette.secondary.main
 						}}
 						onClick={() => {
-							navigate(`/example/view/${exampleDoc._id}`);
+							navigate(`/task/view/${taskDoc._id}`);
 						}}>
 						<Close key={'ExempleDetail-spanCloseKEY'} />
 					</span>
@@ -75,24 +74,55 @@ const ExampleDetail = (props: IExampleDetail) => {
 			<SimpleForm
 				key={'ExempleDetail-SimpleFormKEY'}
 				mode={screenState}
-				schema={exampleApi.getSchema()}
-				doc={exampleDoc}
+				schema={taskApi.getSchema()}
+				doc={taskDoc}
 				onSubmit={handleSubmit}
 				loading={loading}>
-				<div
-					key={'fieldsOne'}
-					style={{
-						display: 'flex',
-						flexDirection: 'row',
-						justifyContent: 'space-around',
-						alignItems: 'center',
-						marginTop: 20
-					}}>
+				<ImageCompactField key={'ExempleDetail-ImageCompactFieldKEY'} label={'Imagem Zoom+Slider'} name={'image'} />
+
+				<FormGroup key={'fieldsOne'}>
 					<TextField key={'f1-tituloKEY'} placeholder="Titulo" name="title" />
 					<TextField key={'f1-descricaoKEY'} placeholder="Descrição" name="description" />
-				</div>
-				<SelectField key={'f2-tipoKEY'} placeholder="Selecione um tipo" name="type" />
-				<ColorPicker name="color" />
+				</FormGroup>
+				<FormGroup key={'fieldsTwo'}>
+					<SelectField key={'f2-tipoKEY'} placeholder="Selecione um tipo" name="type" />
+					<SelectField key={'f2-multiTipoKEY'} placeholder="Selecione alguns tipos" name="typeMulti" />
+				</FormGroup>
+				<FormGroup key={'fieldsThree'} {...{ formType: 'subform', name: 'contacts' }}>
+					<TextMaskField key={'f3-TelefoneKEY'} placeholder="Telefone" name="phone" />
+					<TextMaskField key={'f3-CPFKEY'} placeholder="CPF" name="cpf" />
+				</FormGroup>
+				<FormGroup key={'fieldsFour'} {...{ formType: 'subformArray', name: 'tasks' }}>
+					<TextField key={'f4-nomeTarefaKEY'} placeholder="Nome da Tarefa" name="name" />
+					<TextField key={'f4-descricaoTarefaKEY'} placeholder="Descrição da Tarefa" name="description" />
+				</FormGroup>
+
+				<SliderField key={'ExempleDetail-SliderFieldKEY'} placeholder="Slider" name="slider" />
+
+				<RadioButtonField
+					key={'ExempleDetail-RadioKEY'}
+					placeholder="Opções da Tarefa"
+					name="statusRadio"
+					options={[
+						{ value: 'valA', label: 'Valor A' },
+						{ value: 'valB', label: 'Valor B' },
+						{ value: 'valC', label: 'Valor C' }
+					]}
+				/>
+
+				<FormGroup key={'fieldsFifth'}>
+					<AudioRecorder key={'f5-audioKEY'} placeholder="Áudio" name="audio" />
+				</FormGroup>
+
+				<UploadFilesCollection
+					key={'ExempleDetail-UploadsFilesKEY'}
+					name="files"
+					label={'Arquivos'}
+					doc={{ _id: taskDoc?._id }}
+				/>
+				<FormGroup key={'fieldsSixth'} {...{ name: 'chips' }}>
+					<ChipInput key={'f6-cipsKEY'} name="chip" placeholder="Chip" />
+				</FormGroup>
 				<div
 					key={'Buttons'}
 					style={{
@@ -108,8 +138,8 @@ const ExampleDetail = (props: IExampleDetail) => {
 							style={{ marginRight: 10 }}
 							onClick={
 								screenState === 'edit'
-									? () => navigate(`/example/view/${exampleDoc._id}`)
-									: () => navigate(`/example/list`)
+									? () => navigate(`/task/view/${taskDoc._id}`)
+									: () => navigate(`/task/list`)
 							}
 							color={'secondary'}
 							variant="contained">
@@ -121,7 +151,7 @@ const ExampleDetail = (props: IExampleDetail) => {
 						<Button
 							key={'b2'}
 							onClick={() => {
-								navigate(`/example/edit/${exampleDoc._id}`);
+								navigate(`/task/edit/${taskDoc._id}`);
 							}}
 							color={'primary'}
 							variant="contained">
@@ -139,22 +169,22 @@ const ExampleDetail = (props: IExampleDetail) => {
 	);
 };
 
-interface IExampleDetailContainer extends IDefaultContainerProps {}
+interface ITaskDetailContainer extends IDefaultContainerProps {}
 
-export const ExampleDetailContainer = withTracker((props: IExampleDetailContainer) => {
+export const TaskDetailContainer = withTracker((props: ITaskDetailContainer) => {
 	const { screenState, id, navigate, showNotification } = props;
 
-	const subHandle = !!id ? exampleApi.subscribe('exampleDetail', { _id: id }) : null;
-	const exampleDoc = id && subHandle?.ready() ? exampleApi.findOne({ _id: id }) : {};
+	const subHandle = !!id ? taskApi.subscribe('taskDetail', { _id: id }) : null;
+	const taskDoc = id && subHandle?.ready() ? taskApi.findOne({ _id: id }) : {};
 
 	return {
 		screenState,
-		exampleDoc,
-		save: (doc: IExample, _callback: () => void) => {
+		taskDoc,
+		save: (doc: ITask, _callback: () => void) => {
 			const selectedAction = screenState === 'create' ? 'insert' : 'update';
-			exampleApi[selectedAction](doc, (e: IMeteorError, r: string) => {
+			taskApi[selectedAction](doc, (e: IMeteorError, r: string) => {
 				if (!e) {
-					navigate(`/example/view/${screenState === 'create' ? r : doc._id}`);
+					navigate(`/task/view/${screenState === 'create' ? r : doc._id}`);
 					showNotification &&
 						showNotification({
 							type: 'success',
@@ -173,4 +203,4 @@ export const ExampleDetailContainer = withTracker((props: IExampleDetailContaine
 			});
 		}
 	};
-})(showLoading(ExampleDetail));
+})(showLoading(TaskDetail));

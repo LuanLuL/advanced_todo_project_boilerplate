@@ -1,6 +1,5 @@
 import { createTheme, ThemeOptions } from '@mui/material/styles';
 import * as appStyles from './styles';
-import { ButtonProps } from '@mui/material';
 
 export interface IThemeOptionsBoilerplate extends ThemeOptions {
 	palette: ThemeOptions['palette'] & {
@@ -300,88 +299,88 @@ const getLightTheme = (props: { fontScale: number; isMobile: boolean }): IThemeO
 				}
 			},
 
-			MuiButton: {
-				defaultProps: {
-					size: 'medium',
-					styleVariant: 'primary'
-				} as ButtonProps & { styleVariant: 'primary' | 'secondary' },
-				styleOverrides: {
-					root: (props: any) => ({
-						...(props.styleVariant === 'primary' && {
-							backgroundColor: appStyles.primary,
-							color: appStyles.onPrimary,
-							border: `1px solid ${appStyles.primary}`,
-							'&:hover': {
-								backgroundColor: appStyles.buttonOnHover,
-								border: `1px solid ${appStyles.buttonOnHover}`
-							},
-							'&:focus': {
-								outline: 'none'
-							},
-							'&.Mui-disabled': {
-								color: appStyles.cinza50,
-								backgroundColor: appStyles.cinza90,
-								border: `1px solid ${appStyles.cinza90}`,
-								opacity: 1
-							}
-						}),
-						...(props.styleVariant === 'secondary' && {
-							backgroundColor: 'transparent',
-							color: appStyles.primary,
-							border: `1px solid ${appStyles.primary}`,
-							'&:hover': {
-								backgroundColor: appStyles.primaryOnHover
-							},
-							'&:focus': {
-								outline: 'none'
-							},
-							'&.Mui-disabled': {
-								color: appStyles.cinza50,
-								borderColor: appStyles.cinza80,
-								opacity: 1
-							}
-						}),
-						...appStyles.labelLarge(fontScale),
-						minWidth: 'fit-content',
-						borderRadius: '8px',
-						textTransform: 'unset',
-						display: 'inline-flex',
-						alignItems: 'center',
-						justifyContent: 'center',
-						gap: '8px',
-						'&.MuiButton-sizeSmall': {
-							padding: '4px 16px',
-							minHeight: '34px',
-						},
-						'&.MuiButton-sizeMedium': {
-							padding: '8px 24px',
-							minHeight: '40px',
-						},
-						'&.MuiButton-sizeLarge': {
-							padding: '0.875rem 1.75rem',
-							minHeight: '54px'
-						}
-					}),
-					startIcon: {
-						margin: 0,
-						padding: 0
-					},
-					endIcon: {
-						margin: 0,
-						padding: 0
-					},
-					iconSizeSmall: {
-						'& .MuiSvgIcon-root': {
-							fontSize: '24px',
-						}
-					},
-					iconSizeMedium: {
-						'& .MuiSvgIcon-root': {
-							fontSize: '24px'
-						}
-					}
-				}
-			},
+			// MuiButton: {
+			// 	defaultProps: {
+			// 		size: 'medium',
+			// 		styleVariant: 'primary'
+			// 	} as ButtonProps & { styleVariant: 'primary' | 'secondary' },
+			// 	styleOverrides: {
+			// 		root: (props: any) => ({
+			// 			...(props.styleVariant === 'primary' && {
+			// 				backgroundColor: appStyles.primary,
+			// 				color: appStyles.onPrimary,
+			// 				border: `1px solid ${appStyles.primary}`,
+			// 				'&:hover': {
+			// 					backgroundColor: appStyles.buttonOnHover,
+			// 					border: `1px solid ${appStyles.buttonOnHover}`
+			// 				},
+			// 				'&:focus': {
+			// 					outline: 'none'
+			// 				},
+			// 				'&.Mui-disabled': {
+			// 					color: appStyles.cinza50,
+			// 					backgroundColor: appStyles.cinza90,
+			// 					border: `1px solid ${appStyles.cinza90}`,
+			// 					opacity: 1
+			// 				}
+			// 			}),
+			// 			...(props.styleVariant === 'secondary' && {
+			// 				backgroundColor: 'transparent',
+			// 				color: appStyles.primary,
+			// 				border: `1px solid ${appStyles.primary}`,
+			// 				'&:hover': {
+			// 					backgroundColor: appStyles.primaryOnHover
+			// 				},
+			// 				'&:focus': {
+			// 					outline: 'none'
+			// 				},
+			// 				'&.Mui-disabled': {
+			// 					color: appStyles.cinza50,
+			// 					borderColor: appStyles.cinza80,
+			// 					opacity: 1
+			// 				}
+			// 			}),
+			// 			...appStyles.labelLarge(fontScale),
+			// 			minWidth: 'fit-content',
+			// 			borderRadius: '8px',
+			// 			textTransform: 'unset',
+			// 			display: 'inline-flex',
+			// 			alignItems: 'center',
+			// 			justifyContent: 'center',
+			// 			gap: '8px',
+			// 			'&.MuiButton-sizeSmall': {
+			// 				padding: '4px 16px',
+			// 				minHeight: '34px'
+			// 			},
+			// 			'&.MuiButton-sizeMedium': {
+			// 				padding: '8px 24px',
+			// 				minHeight: '40px'
+			// 			},
+			// 			'&.MuiButton-sizeLarge': {
+			// 				padding: '0.875rem 1.75rem',
+			// 				minHeight: '54px'
+			// 			}
+			// 		}),
+			// 		startIcon: {
+			// 			margin: 0,
+			// 			padding: 0
+			// 		},
+			// 		endIcon: {
+			// 			margin: 0,
+			// 			padding: 0
+			// 		},
+			// 		iconSizeSmall: {
+			// 			'& .MuiSvgIcon-root': {
+			// 				fontSize: '24px'
+			// 			}
+			// 		},
+			// 		iconSizeMedium: {
+			// 			'& .MuiSvgIcon-root': {
+			// 				fontSize: '24px'
+			// 			}
+			// 		}
+			// 	}
+			// },
 
 			MuiFormHelperText: {
 				defaultProps: {

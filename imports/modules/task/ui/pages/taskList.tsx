@@ -1,6 +1,6 @@
 import React from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
-import { exampleApi } from '../../api/exampleApi';
+import { taskApi } from '../../api/taskApi';
 import { userprofileApi } from '../../../../userprofile/api/UserProfileApi';
 import { SimpleTable } from '/imports/ui/components/SimpleTable/SimpleTable';
 import Add from '@mui/icons-material/Add';
@@ -14,7 +14,7 @@ import { nanoid } from 'nanoid';
 import TextField from '/imports/ui/components/SimpleFormFields/TextField/TextField';
 import SearchDocField from '/imports/ui/components/SimpleFormFields/SearchDocField/SearchDocField';
 import { IDefaultContainerProps, IDefaultListProps, IMeteorError } from '/imports/typings/BoilerplateDefaultTypings';
-import { IExample } from '../../api/exampleSch';
+import { ITask } from '../../api/taskSch';
 import { IConfigList } from '/imports/typings/IFilterProperties';
 import { Recurso } from '../../config/Recursos';
 import { RenderComPermissao } from '/imports/seguranca/ui/components/RenderComPermisao';
@@ -22,20 +22,19 @@ import { showLoading } from '/imports/ui/components/Loading/Loading';
 import { ComplexTable } from '/imports/ui/components/ComplexTable/ComplexTable';
 import ToggleField from '/imports/ui/components/SimpleFormFields/ToggleField/ToggleField';
 import { PageLayout } from '/imports/ui/layouts/PageLayout';
-import { any } from 'prop-types';
 
-interface IExampleList extends IDefaultListProps {
-	remove: (doc: IExample) => void;
+interface ITaskList extends IDefaultListProps {
+	remove: (doc: ITask) => void;
 	viewComplexTable: boolean;
 	setViewComplexTable: (_enable: boolean) => void;
-	examples: IExample[];
+	tasks: ITask[];
 	setFilter: (newFilter: Object) => void;
 	clearFilter: () => void;
 }
 
-const ExampleList = (props: IExampleList) => {
+const TaskList = (props: ITaskList) => {
 	const {
-		examples,
+		tasks,
 		navigate,
 		remove,
 		showDeleteDialog,
@@ -53,10 +52,10 @@ const ExampleList = (props: IExampleList) => {
 		isMobile
 	} = props;
 
-    const idExample = nanoid();
+    const idTask = nanoid();
 
 	const onClick = (_event: React.SyntheticEvent, id: string) => {
-		navigate('/example/view/' + id);
+		navigate('/task/view/' + id);
 	};
 
 	const handleChangePage = (_event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null, newPage: number) => {
@@ -95,7 +94,7 @@ const ExampleList = (props: IExampleList) => {
 		}
 	};
 
-	const callRemove = (doc: IExample) => {
+	const callRemove = (doc: ITask) => {
 		const title = 'Remover exemplo';
 		const message = `Deseja remover o exemplo "${doc.title}"?`;
 		showDeleteDialog && showDeleteDialog(title, message, doc, remove);
@@ -105,7 +104,7 @@ const ExampleList = (props: IExampleList) => {
 		!!e.target.value ? setFilter({ createdby: e.target.value }) : clearFilter();
 	};
 
-	const { image, title, description, nomeUsuario } = exampleApi.getSchema();
+	const { image, title, description, nomeUsuario } = taskApi.getSchema();
 	const schemaReduzido = { image, title, description, nomeUsuario: { type: String, label: 'Criado por' } };
 
 	return (
@@ -151,7 +150,7 @@ const ExampleList = (props: IExampleList) => {
 
 					<SimpleTable
 						schema={schemaReduzido}
-						data={examples}
+						data={tasks}
 						onClick={onClick}
 						actions={[{ icon: <Delete />, id: 'delete', onClick: callRemove }]}
 					/>
@@ -160,12 +159,12 @@ const ExampleList = (props: IExampleList) => {
 
 			{!isMobile && viewComplexTable && (
 				<ComplexTable
-					data={examples}
+					data={tasks}
 					schema={schemaReduzido}
-					onRowClick={(row) => navigate('/example/view/' + row.id)}
+					onRowClick={(row) => navigate('/task/view/' + row.id)}
 					searchPlaceholder={'Pesquisar exemplo'}
 					onDelete={callRemove}
-					onEdit={(row) => navigate('/example/edit/' + row._id)}
+					onEdit={(row) => navigate('/task/edit/' + row._id)}
 					toolbar={{
 						selectColumns: true,
 						exportTable: { csv: true, print: true },
@@ -207,7 +206,7 @@ const ExampleList = (props: IExampleList) => {
 						bottom: isMobile ? 80 : 30,
 						right: 30
 					}}>
-					<Fab id={'add'} onClick={() => navigate(`/example/create/${idExample}`)} color={'primary'}>
+					<Fab id={'add'} onClick={() => navigate(`/task/create/${idTask}`)} color={'primary'}>
 						<Add />
 					</Fab>
 				</div>
@@ -227,17 +226,17 @@ export const subscribeConfig = new ReactiveVar<IConfigList & { viewComplexTable:
 	viewComplexTable: false
 });
 
-const exampleSearch = initSearch(
-	exampleApi, // API
+const taskSearch = initSearch(
+	taskApi, // API
 	subscribeConfig, // ReactiveVar subscribe configurations
 	['title', 'description'] // list of fields
 );
 
-let onSearchExampleTyping: NodeJS.Timeout;
+let onSearchTaskTyping: NodeJS.Timeout;
 
 const viewComplexTable = new ReactiveVar(false);
 
-export const ExampleListContainer = withTracker((props: IDefaultContainerProps) => {
+export const TaskListContainer = withTracker((props: IDefaultContainerProps) => {
 	const { showNotification } = props;
 
 	//Reactive Search/Filter
@@ -245,7 +244,7 @@ export const ExampleListContainer = withTracker((props: IDefaultContainerProps) 
 	const sort = {
 		[config.sortProperties.field]: config.sortProperties.sortAscending ? 1 : -1
 	};
-	exampleSearch.setActualConfig(config);
+	taskSearch.setActualConfig(config);
 
 	//Subscribe parameters
 	const filter = { ...config.filter };
@@ -254,18 +253,18 @@ export const ExampleListContainer = withTracker((props: IDefaultContainerProps) 
 	const skip = (config.pageProperties.currentPage - 1) * config.pageProperties.pageSize;
 
 	//Collection Subscribe
-	const subHandle = exampleApi.subscribe('exampleList', filter, {
+	const subHandle = taskApi.subscribe('taskList', filter, {
 		sort,
 		limit,
 		skip
 	});
-	const examples = subHandle?.ready() ? exampleApi.find(filter, { sort }).fetch() : [];
+	const tasks = subHandle?.ready() ? taskApi.find(filter, { sort }).fetch() : [];
 
 	return {
-		examples,
+		tasks,
 		loading: !!subHandle && !subHandle.ready(),
-		remove: (doc: IExample) => {
-			exampleApi.remove(doc, (e: IMeteorError) => {
+		remove: (doc: ITask) => {
+			taskApi.remove(doc, (e: IMeteorError) => {
 				if (!e) {
 					showNotification &&
 						showNotification({
@@ -288,14 +287,14 @@ export const ExampleListContainer = withTracker((props: IDefaultContainerProps) 
 		setViewComplexTable: (enableComplexTable: boolean) => viewComplexTable.set(enableComplexTable),
 		searchBy: config.searchBy,
 		onSearch: (...params: any) => {
-			onSearchExampleTyping && clearTimeout(onSearchExampleTyping);
-			onSearchExampleTyping = setTimeout(() => {
+			onSearchTaskTyping && clearTimeout(onSearchTaskTyping);
+			onSearchTaskTyping = setTimeout(() => {
 				config.pageProperties.currentPage = 1;
 				subscribeConfig.set(config);
-				exampleSearch.onSearch(...params );
+				taskSearch.onSearch(...params);
 			}, 1000);
 		},
-		total: subHandle ? subHandle.total : examples.length,
+		total: subHandle ? subHandle.total : tasks.length,
 		pageProperties: config.pageProperties,
 		filter,
 		sort,
@@ -325,4 +324,4 @@ export const ExampleListContainer = withTracker((props: IDefaultContainerProps) 
 			subscribeConfig.set(config);
 		}
 	};
-})(showLoading(ExampleList));
+})(showLoading(TaskList));
