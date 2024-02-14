@@ -14,10 +14,11 @@
 
  */
 
-export const appNavBarStyle = {
+export const appNavBarStyles = {
 	containerNavBar: {
 		display: 'flex',
 		flexDirection: 'row',
+		justifyContent: 'space-around',
 		width: '100%'
 	},
 	subContainerNavBar: {
@@ -34,7 +35,7 @@ export const appNavBarStyle = {
 		lineHeight: 1.2,
 		letterSpacing: '0.55px',
 		textAlign: 'left',
-		color: '#ffffff',
+		color: '#000',
 		textTransform: 'none'
 	},
 	accountCircle: {

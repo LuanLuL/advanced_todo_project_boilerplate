@@ -1,36 +1,32 @@
-/*!
-
- =========================================================
- * Material Dashboard React - v1.0.0 based on Material Dashboard - v1.2.0
- =========================================================
-
- * Product Page: http://www.creative-tim.com/product/material-dashboard-react
- * Copyright 2018 Creative Tim (http://www.creative-tim.com)
- * Licensed under MIT (https://github.com/creativetimofficial/material-dashboard-react/blob/master/LICENSE.md)
-
- =========================================================
-
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
- */
+import { primary, secondary } from '../../../materialui/styles';
 
 export const passwordRecoveryStyle = {
 	containerRecoveryPassword: {
+		padding: '0px 20px',
 		width: '100%',
-		maxWidth: 400
-	},
-	labelAccessSystem: {
-		textAlign: 'center',
+		marginTop: '80px',
+		backgroundColor: secondary,
 		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'center',
-		alignItems: 'center'
+		alignItems: 'center',
+		gap: '120px'
 	},
-	imageLogo: {
-		maxWidth: 100
+	labelAccessSystem: {
+		textAlign: 'center',
+		fontSize: '60px',
+		fontFamily: '"Roboto", sans-serif',
+		color: primary,
+		fontWeight: 900,
+		lineHeight: '60px'
+	},
+	formPasswordR: {
+		textAlign: 'center',
+		width: '100%',
+		maxWidth: 600
 	},
 	containerButtonOptions: {
-		marginTop: 30,
+		marginTop: 10,
 		display: 'flex',
 		flexDirection: 'row',
 		justifyContent: 'space-between',

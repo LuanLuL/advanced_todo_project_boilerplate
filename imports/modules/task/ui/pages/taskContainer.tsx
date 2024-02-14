@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 
 export default (props: IDefaultContainerProps) => {
 	const validState = ['view', 'edit', 'create'];
+	console.log(props);
 
 	let { screenState, taskId } = useParams();
 

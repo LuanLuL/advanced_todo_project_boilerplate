@@ -29,11 +29,13 @@ export const DrawerContainer = (options: IDrawerContainerOptions = commonOptions
 				style={{
 					height: '100%',
 					maxHeight: '100vh',
-					minWidth: isMobile ? '100%' : 360,
-					maxWidth: 460,
+					width: isMobile ? '100%' : 360,
+					backgroundColor: '#fff',
+					maxWidth: 720,
 					display: 'flex',
 					flexDirection: 'column',
-					alignItems: 'center'
+					alignItems: 'center',
+					padding: '20px 16px'
 				}}>
 				{options.title ? (
 					<div

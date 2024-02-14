@@ -4,3 +4,4 @@
 node_modules
 .vscode
 *.cypress/cucumber-json  
+imports/ui/components/SimpleFormFields/RichTextEditor/quill.snow.css

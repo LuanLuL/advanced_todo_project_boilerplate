@@ -1,19 +1,3 @@
-/*!
-
- =========================================================
- * Material Dashboard React - v1.0.0 based on Material Dashboard - v1.2.0
- =========================================================
-
- * Product Page: http://www.creative-tim.com/product/material-dashboard-react
- * Copyright 2018 Creative Tim (http://www.creative-tim.com)
- * Licensed under MIT (https://github.com/creativetimofficial/material-dashboard-react/blob/master/LICENSE.md)
-
- =========================================================
-
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
- */
-
 const fixedMenuLayoutStyle = {
 	containerFixedMenuRouter: {
 		display: 'flex',
@@ -34,8 +18,7 @@ const fixedMenuLayoutStyle = {
 		width: '100%',
 		height: 'calc(100% - 48px)',
 		overflowY: 'auto',
-		overflowX: 'hidden',
-		position: 'relative'
+		overflowX: 'hidden'
 	},
 	homeIconButton: {
 		maxHeight: 50,
@@ -45,19 +28,16 @@ const fixedMenuLayoutStyle = {
 		margin: '4.8px 0 4.4px 27px',
 		objectFit: 'contain'
 	},
-	containerFixedMenu: {
-		display: 'flex',
-		flexDirection: 'row',
-		width: '100%',
-		alignItems: 'center',
-		justifyContent: 'space-between'
-	},
 	toolbarFixedMenu: {
 		display: 'flex',
 		flexDirection: 'row',
-		justifyContent: 'flex-end',
-		alignItems: 'center',
-		width: '100%'
+		justifyContent: 'flex-start',
+		alignItems: 'end',
+		margin: '0px 40px',
+		padding: '0px 24px',
+		gap: 8,
+		height: 75,
+		maxHeight: 75
 	},
 	containerAppRouter: {
 		display: 'flex',

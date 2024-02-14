@@ -5,7 +5,6 @@ import SimpleLabelView from '/imports/ui/components/SimpleLabelView/SimpleLabelV
 import InputBase from '@mui/material/InputBase';
 import * as appStyle from '/imports/materialui/styles';
 import omit from 'lodash/omit';
-import { createStyles, Theme } from '@mui/material/styles';
 import { IBaseSimpleFormComponent } from '../../InterfaceBaseSimpleFormComponent';
 
 export default ({
@@ -25,8 +24,8 @@ export default ({
 		value === '-'
 			? '-'
 			: schema && schema.type === Date && !!value && value instanceof Date
-			? value.toLocaleDateString('pt-BR')
-			: value;
+				? value.toLocaleDateString('pt-BR')
+				: value;
 
 	const applyMask = (inputValue: string, mask: string) => {
 		let text = '';
@@ -144,6 +143,7 @@ export default ({
 					name={name}
 					label={otherProps.rounded ? label : null}
 					type={'text'}
+					style={style}
 				/>
 			</div>
 		);
@@ -175,6 +175,7 @@ export default ({
 			}}>
 			<SimpleLabelView label={label} disabled={readOnly} />
 			<TextField
+				style={style}
 				{...otherProps}
 				key={name}
 				onChange={handleApplyMask}
@@ -186,7 +187,6 @@ export default ({
 				label={null}
 				help={help}
 				placeholder={placeholder}
-				style={style ? { displayLabel: style.displayLabel } : undefined}
 			/>
 		</div>
 	);

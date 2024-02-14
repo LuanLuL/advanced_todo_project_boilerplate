@@ -14,6 +14,21 @@ export const appTopMenuStyle = {
 		height: 75,
 		maxHeight: 75
 	},
+	boxTitleContentTopMenu: {
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+		gap: '15px'
+	},
+	buttonTitleContentTopMenu: {
+		width: 30,
+		height: 30,
+		color: '#4e4e4e',
+		'&: hover': {
+			cursor: 'pointer'
+		},
+		padding: '2px'
+	},
 	titleContentTopMenu: {
 		fontFamily: "'Roboto', sans-serif",
 		fontSize: 30,

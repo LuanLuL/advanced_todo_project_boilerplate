@@ -4,6 +4,7 @@ import TextField from '@mui/material/TextField';
 import SimpleLabelView from '/imports/ui/components/SimpleLabelView/SimpleLabelView';
 import * as appStyle from '/imports/materialui/styles';
 import { IBaseSimpleFormComponent } from '../../InterfaceBaseSimpleFormComponent';
+import { textFieldStyle } from './TextFieldStyle';
 
 interface ITextFieldSimpleFormComponent extends IBaseSimpleFormComponent {
 	maxCaracteres?: 'short' | 'medium' | 'long';
@@ -65,8 +66,8 @@ export default ({
 		value === '-'
 			? '-'
 			: schema && schema.type === Date && !!value && value instanceof Date
-			? value.toLocaleDateString('pt-BR')
-			: value;
+				? value.toLocaleDateString('pt-BR')
+				: value;
 
 	fieldValue = valueFormatter(fieldValue);
 	fieldValue = applyMask(fieldValue);
@@ -103,12 +104,7 @@ export default ({
 					...(containerStyle ? containerStyle : {})
 				}}>
 				{label && !otherProps.rounded ? (
-					<SimpleLabelView
-						label={label}
-						style={style ? style.displayLabel : undefined}
-						help={help}
-						disabled={readOnly}
-					/>
+					<SimpleLabelView label={label} style={{ padding: '10px' }} help={help} disabled={readOnly} />
 				) : null}
 
 				<TextField
@@ -152,9 +148,7 @@ export default ({
 				...appStyle.fieldContainer,
 				...(containerStyle ? containerStyle : {})
 			}}>
-			{label && !otherProps.rounded ? (
-				<SimpleLabelView label={label} help={help} style={style ? { displayLabel: style.displayLabel } : undefined} />
-			) : null}
+			{label && !otherProps.rounded ? <SimpleLabelView label={label} help={help} style={{ padding: '10px' }} /> : null}
 
 			<TextField
 				style={style}

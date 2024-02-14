@@ -15,13 +15,16 @@
  */
 
 const appGeneralStyle: {
-    [key: string]: { [subkey: string]: React.CSSProperties } | React.CSSProperties;
+	[key: string]: { [subkey: string]: React.CSSProperties } | React.CSSProperties;
 } = {
-    containerOptions: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
+	containerOptions: {
+		display: 'flex',
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: '15px',
+		color: '#000',
+		fontFamily: '"Roboto", sans-serif'
+	}
 };
 
 export { appGeneralStyle };

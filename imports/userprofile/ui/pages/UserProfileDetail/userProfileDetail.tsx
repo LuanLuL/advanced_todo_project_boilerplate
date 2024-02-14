@@ -40,8 +40,8 @@ const UserProfileDetail = ({ screenState, loading, user, save, navigate, hiddenT
 							screenState === 'edit'
 								? () => navigate(`/userprofile/view/${user._id}`)
 								: !!hiddenTitleBar
-								? close
-								: () => navigate(`/userprofile/list`)
+									? close
+									: () => navigate(`/userprofile/list`)
 						}
 						color={'secondary'}
 						variant="contained">

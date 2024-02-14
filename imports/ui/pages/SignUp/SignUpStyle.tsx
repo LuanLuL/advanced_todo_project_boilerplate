@@ -1,40 +1,46 @@
-/*!
-
- =========================================================
- * Material Dashboard React - v1.0.0 based on Material Dashboard - v1.2.0
- =========================================================
-
- * Product Page: http://www.creative-tim.com/product/material-dashboard-react
- * Copyright 2018 Creative Tim (http://www.creative-tim.com)
- * Licensed under MIT (https://github.com/creativetimofficial/material-dashboard-react/blob/master/LICENSE.md)
-
- =========================================================
-
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
- */
+import { primary, secondary } from '../../../materialui/styles';
 
 export const signUpStyle = {
 	containerSignUp: {
-		width: '100%',
-		maxWidth: 400
-	},
-	labelRegisterSystem: {
-		textAlign: 'center',
+		width: '100vw',
+		backgroundColor: secondary,
 		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'center',
-		alignItems: 'center'
+		alignItems: 'center',
+		gap: '40px',
+		padding: '0px 20px'
 	},
-	imageLogo: {
-		maxWidth: 100
+	labelRegisterSystem: {
+		marginTop: '15px',
+		textAlign: 'center',
+		fontSize: '55px',
+		fontFamily: '"Roboto", sans-serif',
+		color: primary,
+		fontWeight: 900,
+		lineHeight: '60px'
+	},
+	formSignUp: {
+		textAlign: 'center',
+		width: '100%',
+		maxWidth: 600
+	},
+	inputSignUp: {
+		marginBottom: '20px'
 	},
 	containerButtonOptions: {
-		display: 'flex',
-		flexDirection: 'row',
-		justifyContent: 'space-around'
+		marginTop: '16px'
 	},
 	containerRouterSignIn: {
-		color: '#444'
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'center',
+		alignItems: 'center',
+		textAlign: 'center'
+	},
+	routersSignUp: {
+		color: primary,
+		fontSize: '16px',
+		fontWeight: 'bold'
 	}
 };

@@ -36,13 +36,13 @@ export interface IDefaultListProps extends IDefaultContainerProps {
 	navigate: NavigateFunction;
 	user: IUserProfile;
 	onSearch: (text?: string) => void;
-	total: number;
 	loading: boolean;
-	setPage: (page: number) => void;
-	setPageSize: (pageSize: number) => void;
-	setSort: (sort: ISortProperties) => void;
-	searchBy?: string | null;
-	pageProperties: { currentPage: number; pageSize: number };
+	setPage: (page: number, completed: boolean) => void;
+	setPageSize: (pageSize: number, completed: boolean) => void;
+	pagePropertiesCompletedTasks: { currentPage: number; pageSize: number };
+	pagePropertiesNotCompletedTasks: { currentPage: number; pageSize: number };
+	tasksCompletedLength: number;
+	tasksNotCompletedLength: number;
 }
 
 export interface IMeteorError extends Meteor.Error {

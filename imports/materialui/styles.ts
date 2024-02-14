@@ -17,14 +17,14 @@
 import React from 'react';
 
 /////////////////////////////////////////////// Paleta de cores do prototipo de alta /////////////////////////////////
-const primary = '#5a9902';
+const primary = '#000000';
 const onPrimary = '#FFFFFF';
 const primaryContainer = '#9DE4D6';
 const onPrimaryContainer = '#034944';
 const primaryOnHover = 'rgba(0, 126, 122, 0.1)';
 
-const secondary = '#2182C0';
-const onSecondary = '#034944';
+const secondary = '#FFFFFF';
+const onSecondary = '#000000';
 const secondaryContainer = '#FFDD99';
 const onSecondaryContainer = '#034944';
 const secondaryOnHover = 'rgba(236, 177, 31, 0.2)';

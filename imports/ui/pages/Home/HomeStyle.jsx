@@ -15,27 +15,69 @@
  */
 
 import { isMobile } from '/imports/libs/deviceVerify';
+import { primary, secondary } from '../../../materialui/styles';
 
 const homeStyles = {
-    title: {
-        fontSize: isMobile ? '20px' : '30px',
-        paddingTop: isMobile ? '20px' : '20px',
-        paddingBottom: isMobile ? '20px' : '20px',
-        fontWeight: isMobile ? '500' : '500',
-    },
-    subTitle: {
-        fontSize: isMobile ? '15px' : '25px',
-        paddingTop: isMobile ? '10px' : '10px',
-        paddingBottom: isMobile ? '20px' : '20px',
-        fontWeight: isMobile ? '300' : '300',
-        textAlign: 'justify',
-        textJustify: 'inter-word',
-    },
-    containerHome: {
-        marginTop: '2em',
-        maxWidth: '100%',
-        maxHeight: '100%',
-    },
+	bodyHome: {
+		color: primary,
+		backgroundColor: '#fff',
+		padding: '1px',
+		width: '100vw',
+		height: 'auto'
+	},
+	containerHome: {
+		maxWidth: '960px',
+		padding: '10px',
+		margin: '60px auto'
+	},
+	contentLabelHome: {
+		display: 'flex',
+		flexDirection: 'column',
+		gap: '31px'
+	},
+	mainLabelHome: {
+		color: primary,
+		fontFamily: '"Roboto", sans-serif',
+		fontWeight: 'bold',
+		fontSize: '60px'
+	},
+	descriptionLabelHome: {
+		fontFamily: '"Roboto", sans-serif',
+		fontSize: '18px'
+	},
+	contentListHome: {
+		display: 'flex',
+		flexDirection: 'column',
+		margin: '74px 0px 0px 0px'
+	},
+	subLabelHome: {
+		color: primary,
+		fontFamily: '"Roboto", sans-serif',
+		fontWeight: 'bold',
+		fontSize: '22px',
+		marginBottom: '10px'
+	},
+	contentRouterNext: {
+		position: 'absolute',
+		bottom: '50px',
+		left: '50%',
+		transform: 'translateX(-50%)'
+	},
+	routerNext: {
+		textTransform: 'none',
+		textAlign: 'center',
+		fontSize: '18px',
+		backgroundColor: '#C4C4C4',
+		color: primary,
+		borderRadius: '30px',
+		height: '50px',
+		padding: '10px 30px',
+		marginTop: '30px',
+		'&: hover': {
+			backgroundColor: '#979797'
+		},
+		boxShadow: '0 4px 6px rgba(0, 0, 0, 0.2)'
+	}
 };
 
 export { homeStyles };

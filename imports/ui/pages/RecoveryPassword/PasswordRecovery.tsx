@@ -6,7 +6,7 @@ import { Accounts } from 'meteor/accounts-base';
 import TextField from '../../components/SimpleFormFields/TextField/TextField';
 import Button from '@mui/material/Button';
 import SimpleForm from '/imports/ui/components/SimpleForm/SimpleForm';
-
+import Typography from '@mui/material/Typography';
 import { passwordRecoveryStyle } from './PasswordRecoveryStyle';
 import { IDefaultContainerProps } from '/imports/typings/BoilerplateDefaultTypings';
 import { FixedMenuLayoutContext } from '../../layouts/FixedMenuLayout';
@@ -55,26 +55,25 @@ export const PasswordRecovery = (props: IDefaultContainerProps) => {
 	}, []);
 
 	return (
-		<Container style={passwordRecoveryStyle.containerRecoveryPassword}>
-			<h2 style={passwordRecoveryStyle.labelAccessSystem}>
-				<img src="/images/wireframe/logo.png" style={passwordRecoveryStyle.imageLogo} />
-				{'Acessar o sistema'}
-			</h2>
-			<SimpleForm
-				schema={{
-					email: { type: 'String', label: 'Email', optional: false }
-				}}
-				onSubmit={handleSubmit}>
-				<TextField label="Email" icon="user" name="email" type="email" placeholder="Digite seu email" />
-				<Box sx={passwordRecoveryStyle.containerButtonOptions}>
-					<Button color={'secondary'} onClick={() => navigate('/signin')}>
-						Voltar
-					</Button>
-					<Button id="submit" color={'primary'} variant={'outlined'}>
-						Recuperar a senha
-					</Button>
-				</Box>
-			</SimpleForm>
+		<Container sx={{ ...passwordRecoveryStyle.containerRecoveryPassword }}>
+			<Typography sx={{ ...passwordRecoveryStyle.labelAccessSystem }}>{'Acessar o sistema'}</Typography>
+			<Box sx={{ ...passwordRecoveryStyle.formPasswordR }}>
+				<SimpleForm
+					schema={{
+						email: { type: 'String', label: 'Email', optional: false }
+					}}
+					onSubmit={handleSubmit}>
+					<TextField label="Email" icon="user" name="email" type="email" placeholder="Digite seu email" />
+					<Box sx={passwordRecoveryStyle.containerButtonOptions}>
+						<Button color={'primary'} onClick={() => navigate('/signin')}>
+							Voltar
+						</Button>
+						<Button id="submit" color={'primary'} variant={'outlined'}>
+							Recuperar a senha
+						</Button>
+					</Box>
+				</SimpleForm>
+			</Box>
 		</Container>
 	);
 };

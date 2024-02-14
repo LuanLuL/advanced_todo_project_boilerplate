@@ -22,7 +22,6 @@ import { showLoading } from '/imports/ui/components/Loading/Loading';
 import { ComplexTable } from '/imports/ui/components/ComplexTable/ComplexTable';
 import ToggleField from '/imports/ui/components/SimpleFormFields/ToggleField/ToggleField';
 import { PageLayout } from '/imports/ui/layouts/PageLayout';
-import { any } from 'prop-types';
 
 interface IExampleList extends IDefaultListProps {
 	remove: (doc: IExample) => void;
@@ -53,7 +52,7 @@ const ExampleList = (props: IExampleList) => {
 		isMobile
 	} = props;
 
-    const idExample = nanoid();
+	const idExample = nanoid();
 
 	const onClick = (_event: React.SyntheticEvent, id: string) => {
 		navigate('/example/view/' + id);
@@ -145,7 +144,7 @@ const ExampleList = (props: IExampleList) => {
 						value={text}
 						onChange={change}
 						onKeyPress={keyPress}
-						placeholder="Digite aqui o que deseja pesquisa..."
+						placeholder="Digite aqui o que deseja pesquisar..."
 						action={{ icon: 'search', onClick: click }}
 					/>
 
@@ -292,7 +291,7 @@ export const ExampleListContainer = withTracker((props: IDefaultContainerProps) 
 			onSearchExampleTyping = setTimeout(() => {
 				config.pageProperties.currentPage = 1;
 				subscribeConfig.set(config);
-				exampleSearch.onSearch(...params );
+				exampleSearch.onSearch(...params);
 			}, 1000);
 		},
 		total: subHandle ? subHandle.total : examples.length,
@@ -301,6 +300,11 @@ export const ExampleListContainer = withTracker((props: IDefaultContainerProps) 
 		sort,
 		setPage: (page = 1) => {
 			config.pageProperties.currentPage = page;
+			subscribeConfig.set(config);
+		},
+
+		setPageSize: (size = 25) => {
+			config.pageProperties.pageSize = size;
 			subscribeConfig.set(config);
 		},
 		setFilter: (newFilter = {}) => {
@@ -318,10 +322,6 @@ export const ExampleListContainer = withTracker((props: IDefaultContainerProps) 
 		},
 		setSort: (sort = { field: 'createdat', sortAscending: true }) => {
 			config.sortProperties = sort;
-			subscribeConfig.set(config);
-		},
-		setPageSize: (size = 25) => {
-			config.pageProperties.pageSize = size;
 			subscribeConfig.set(config);
 		}
 	};

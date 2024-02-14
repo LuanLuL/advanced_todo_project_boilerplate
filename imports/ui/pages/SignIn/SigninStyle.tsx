@@ -1,25 +1,10 @@
-/*!
-
- =========================================================
- * Material Dashboard React - v1.0.0 based on Material Dashboard - v1.2.0
- =========================================================
-
- * Product Page: http://www.creative-tim.com/product/material-dashboard-react
- * Copyright 2018 Creative Tim (http://www.creative-tim.com)
- * Licensed under MIT (https://github.com/creativetimofficial/material-dashboard-react/blob/master/LICENSE.md)
-
- =========================================================
-
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
- */
+import { primary, secondary } from '../../../materialui/styles';
 
 const signinStyle = {
 	containerSignIn: {
+		padding: '0px 20px',
 		width: '100%',
-		maxWidth: 400
-	},
-	subContainerSignIn: {
+		backgroundColor: secondary,
 		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'center',
@@ -27,60 +12,44 @@ const signinStyle = {
 	},
 	labelAccessSystem: {
 		textAlign: 'center',
+		fontSize: '55px',
+		fontFamily: '"Roboto", sans-serif',
+		color: primary,
+		fontWeight: 900,
+		marginTop: '10px'
+	},
+	formSignIn: {
+		textAlign: 'center',
+		width: '100%',
+		maxWidth: 600
+	},
+	inputSignIn: {
+		marginBottom: '20px'
+	},
+	containerSubLabelSignUp: {
+		margin: '40px auto'
+	},
+	subLabelAccessSystem: {
+		textAlign: 'center',
+		fontSize: '18px',
+		fontFamily: 'Roboto, sans-serif',
+		color: primary
+	},
+	containerButtonOptions: {
+		marginTop: '16px'
+	},
+	containerRouterSignUp: {
 		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'center',
-		alignItems: 'center'
-	},
-	imageLogo: {
-		backgroundColor: '#ff9937',
-		maxWidth: 100,
-		borderRadius: 30,
-		padding: 5
-	},
-	containerButtonOptions: {
-		display: 'flex',
-		flexDirection: 'row',
-		justifyContent: 'space-between'
-	},
-	containerSocialLoginButton: {
-		width: '100%',
-		display: 'flex',
-		flexDirection: 'row',
-		justifyContent: 'center',
 		alignItems: 'center',
-		height: 50,
-		color: '#FFF'
+		gap: '5px',
+		marginTop: '40px'
 	},
-	socialLoginButtonText: {
-		marginLeft: 15
-	},
-	containerRouterSignUp: {
-		marginTop: 15
-	},
-	containerLoginOptions: {
-		paddingRight: 5,
-		width: '102%',
-		margin: 0,
-		padding: 0,
-		display: 'flex',
-		flexDirection: 'column'
-	},
-	containerButtonGoogle: {
-		width: '100%'
-	},
-	containerButtonFacebook: {
-		width: '100%'
-	},
-	buttonLoginGoogle: {
-		background: '#dd4b39',
-		width: '100%',
-		cursor: 'pointer'
-	},
-	buttonLoginFacebook: {
-		background: '#3B5998',
-		width: '100%',
-		cursor: 'pointer'
+	routersSignIn: {
+		color: primary,
+		fontSize: '16px',
+		fontWeight: 'bold'
 	}
 };
 

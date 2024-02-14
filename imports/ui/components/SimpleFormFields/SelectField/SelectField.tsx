@@ -89,7 +89,7 @@ export default ({
 											color={'primary'}
 										/>
 									);
-							  })}
+								})}
 					</div>
 				</div>
 			);
@@ -193,6 +193,7 @@ export default ({
 			) : null}
 
 			<Select
+				color="primary"
 				displayEmpty
 				labelId={`${label}${name}`}
 				key={{ name }}
@@ -204,7 +205,7 @@ export default ({
 						: {
 								borderColor: '#f2f2f2',
 								marginTop: 4
-						  }),
+							}),
 					...{
 						border: error ? '1px solid #ff0000' : 'undefined',
 						borderRadius: error ? '4px' : undefined

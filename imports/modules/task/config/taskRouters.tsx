@@ -2,6 +2,7 @@ import React from 'react';
 import TaskContainer from '../ui/pages/taskContainer';
 import { Recurso } from './Recursos';
 import { IRoute } from '/imports/modules/modulesTypings';
+import { SearchTask } from '../ui/components/searchTask';
 
 export const taskRouterList: IRoute[] = [
 	{

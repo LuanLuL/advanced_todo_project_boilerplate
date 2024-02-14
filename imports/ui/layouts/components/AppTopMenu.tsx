@@ -1,6 +1,7 @@
 import PersonIcon from '@mui/icons-material/Person';
 import { Box, Button, Container, Menu, Typography } from '@mui/material';
 import React, { useState } from 'react';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 import { DayNightToggle } from './DayNightToggle';
 import { ILayoutProps } from '/imports/typings/BoilerplateDefaultTypings';
@@ -8,9 +9,12 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import MenuItem from '@mui/material/MenuItem';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { appTopMenuStyle } from './AppTopMenuStyle';
-import { secondary } from '/imports/materialui/styles';
 
-export const AppTopMenu = (props: ILayoutProps) => {
+interface IAppTopMenu extends ILayoutProps {
+	activeGoBack: string | undefined;
+}
+
+export const AppTopMenu = (props: IAppTopMenu) => {
 	const { user, showDrawer, showWindow, theme, themeOptions } = props;
 
 	const navigate = useNavigate();
@@ -43,7 +47,21 @@ export const AppTopMenu = (props: ILayoutProps) => {
 	return (
 		<Box sx={appTopMenuStyle.mainContainer}>
 			<Container sx={appTopMenuStyle.contentTopMenu}>
-				<Typography sx={appTopMenuStyle.titleContentTopMenu}>ToDo List</Typography>
+				<Box sx={appTopMenuStyle.boxTitleContentTopMenu}>
+					{props.activeGoBack !== undefined ? (
+						<ArrowBackIcon
+							onClick={() => {
+								navigate(`${props.activeGoBack}`);
+							}}
+							sx={{
+								...appTopMenuStyle.buttonTitleContentTopMenu
+							}}
+						/>
+					) : (
+						<></>
+					)}
+					<Typography sx={appTopMenuStyle.titleContentTopMenu}>ToDo List</Typography>
+				</Box>
 				<Button
 					aria-label="account of current user"
 					aria-controls="menu-appbar"
@@ -52,11 +70,10 @@ export const AppTopMenu = (props: ILayoutProps) => {
 					sx={{
 						'&:hover': {
 							color: '#979797',
-							backgroundColor: '#979797'
+							backgroundColor: 'transparent'
 						},
 						'&:active': {
-							color: '#979797',
-							backgroundColor: '#979797'
+							color: 'transparent'
 						}
 					}}>
 					<PersonIcon fontSize="large" id="Perfil" name="Perfil" style={appTopMenuStyle.accountCircle} />

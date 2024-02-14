@@ -85,16 +85,50 @@ export const AppGeneralComponents = (props: IGeneralComponentsProps) => {
 
 	const showDeleteDialog = (title: string, message: string, doc: Object, remove: (doc: Object) => void) => {
 		const options = {
-			icon: <Delete />,
+			icon: <Delete color="primary" fontSize="large" />,
 			title,
 			content: () => {
 				return <p>{message}</p>;
 			},
 			actions: ({ closeDialog }: { closeDialog: () => void }) => [
-				<Button key={'botaoNao'} variant={'outlined'} color={'secondary'} onClick={closeDialog}>
+				<Button
+					sx={{
+						textTransform: 'none',
+						textAlign: 'center',
+						fontSize: '16px',
+						border: 'none',
+						backgroundColor: 'rgb(247, 24, 24)',
+						color: 'white',
+						borderRadius: '8px',
+						height: '40px',
+						padding: '5px 25px',
+						marginBottom: '10px',
+						'&: hover': {
+							backgroundColor: 'rgba(247, 24, 24, 0.9)'
+						}
+					}}
+					key={'botaoNao'}
+					variant={'contained'}
+					color={'primary'}
+					onClick={closeDialog}>
 					Não
 				</Button>,
 				<Button
+					sx={{
+						textTransform: 'none',
+						textAlign: 'center',
+						fontSize: '16px',
+						border: 'none',
+						backgroundColor: 'rgb(56, 177, 75)',
+						color: 'white',
+						borderRadius: '8px',
+						height: '40px',
+						padding: '5px 25px',
+						margin: '0px 10px 10px 20px',
+						'&: hover': {
+							backgroundColor: 'rgba(56, 177, 75, 0.9)'
+						}
+					}}
 					key={'botaoSim'}
 					variant={'contained'}
 					onClick={() => {

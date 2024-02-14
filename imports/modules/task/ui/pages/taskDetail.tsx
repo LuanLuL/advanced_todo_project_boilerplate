@@ -1,186 +1,223 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import { taskApi } from '../../api/taskApi';
 import SimpleForm from '../../../../ui/components/SimpleForm/SimpleForm';
 import Button from '@mui/material/Button';
-import FormGroup from '@mui/material/FormGroup';
 import TextField from '/imports/ui/components/SimpleFormFields/TextField/TextField';
-import TextMaskField from '../../../../ui/components/SimpleFormFields/TextMaskField/TextMaskField';
-import RadioButtonField from '../../../../ui/components/SimpleFormFields/RadioButtonField/RadioButtonField';
 import SelectField from '../../../../ui/components/SimpleFormFields/SelectField/SelectField';
-import UploadFilesCollection from '../../../../ui/components/SimpleFormFields/UploadFiles/uploadFilesCollection';
-import ChipInput from '../../../../ui/components/SimpleFormFields/ChipInput/ChipInput';
-import SliderField from '/imports/ui/components/SimpleFormFields/SliderField/SliderField';
-import AudioRecorder from '/imports/ui/components/SimpleFormFields/AudioRecorderField/AudioRecorder';
-import ImageCompactField from '/imports/ui/components/SimpleFormFields/ImageCompactField/ImageCompactField';
-import Print from '@mui/icons-material/Print';
-import Close from '@mui/icons-material/Close';
-import { PageLayout } from '../../../../ui/layouts/PageLayout';
 import { ITask } from '../../api/taskSch';
 import { IDefaultContainerProps, IDefaultDetailProps, IMeteorError } from '/imports/typings/BoilerplateDefaultTypings';
-import { useTheme } from '@mui/material/styles';
-import { showLoading } from '/imports/ui/components/Loading/Loading';
+import { Loading, showLoading } from '/imports/ui/components/Loading/Loading';
+import Close from '@mui/icons-material/Close';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import { taskDetailStyles } from '../components/styles/taskDetailStyle';
+import { showNotification } from '/imports/ui/GeneralComponents/ShowNotification';
+import { IUserProfile } from '/imports/userprofile/api/UserProfileSch';
+import { taskStyles } from '../components/styles/taskStyle';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 
 interface ITaskDetail extends IDefaultDetailProps {
 	taskDoc: ITask;
+	user: IUserProfile;
 	save: (doc: ITask, _callback?: any) => void;
+	closeComponent: () => void;
 }
 
 const TaskDetail = (props: ITaskDetail) => {
-	const { isPrintView, screenState, loading, taskDoc, save, navigate } = props;
+	const { screenState, loading, taskDoc, save, closeComponent, navigate, user } = props;
 
-	const theme = useTheme();
+	if (screenState === 'edit' && taskDoc?.status === true) {
+		navigate('/task');
+	}
+
+	console.log('TAREFA === ', taskDoc);
+
+	if (!user) {
+		return <Loading />;
+	}
 
 	const handleSubmit = (doc: ITask) => {
 		save(doc);
 	};
 
+	if (screenState === 'view') {
+		return (
+			<Box component="div" sx={{ ...taskDetailStyles.containerTaskDetail }}>
+				<Box component="div" sx={{ ...taskDetailStyles.contentLabelTaskDetail }}>
+					<Box component="div" sx={{ ...taskDetailStyles.groupTitle }}>
+						{taskDoc.status ? (
+							<CheckCircleOutlineIcon
+								fontSize="large"
+								sx={{ ...taskStyles.buttonTask }}
+								color="primary"
+								onClick={() => toggleStatusTask()}
+							/>
+						) : (
+							<RadioButtonUncheckedIcon
+								fontSize="large"
+								sx={{ ...taskStyles.buttonTask }}
+								color="primary"
+								onClick={() => toggleStatusTask()}
+							/>
+						)}
+						<Typography
+							sx={{ ...taskDetailStyles.labelTaskDetail, ...(taskDoc.status ? taskStyles.completedTask : {}) }}>
+							{taskDoc.title}
+						</Typography>
+					</Box>
+					<IconButton
+						onClick={() => {
+							closeComponent();
+						}}>
+						<Close color="primary" />
+					</IconButton>
+				</Box>
+				<Box component="div" sx={{ ...taskDetailStyles.formTaskDetail }}>
+					<Typography sx={{ ...taskDetailStyles.descriptionTitle }}>{'Descrição'}</Typography>
+					<Typography sx={{ ...taskDetailStyles.descriptionLabel }}>{taskDoc.description}</Typography>
+					<Typography sx={{ ...taskDetailStyles.descriptionTitle }}>{'Tipo'}</Typography>
+					<Typography sx={{ ...taskDetailStyles.descriptionLabel }}>{taskDoc.category}</Typography>
+
+					<Box component="div" sx={{ ...taskDetailStyles.contentButton }}>
+						{taskDoc.createdby !== user._id ? (
+							<></>
+						) : (
+							<Button
+								id="submit"
+								sx={{ ...taskDetailStyles.buttonTaskDetail }}
+								onClick={() => {
+									if (taskDoc.status === true) {
+										showNotification &&
+											showNotification({
+												type: 'warning',
+												title: 'A tarefa está concluída',
+												description: `É preciso reabrir a tarefa para poder edita-la.`
+											});
+										return;
+									}
+									navigate(`/task/edit/${taskDoc._id}`);
+								}}>
+								Editar
+							</Button>
+						)}
+					</Box>
+					<Box sx={{ ...taskDetailStyles.finalContent }}>
+						<Typography component="p" sx={{ ...taskStyles.subLabelTask }}>
+							Criada por:{' '}
+							<Typography component="span" sx={{ ...taskStyles.subLabelTask, ...taskStyles.userNameTask }}>
+								{taskDoc.createdby === user?._id ? 'Você' : taskDoc.username}
+							</Typography>
+						</Typography>
+					</Box>
+				</Box>
+			</Box>
+		);
+	}
+
 	return (
-		<PageLayout
-			key={'ExemplePageLayoutDetailKEY'}
-			title={
-				screenState === 'view' ? 'Visualizar exemplo' : screenState === 'edit' ? 'Editar Exemplo' : 'Criar exemplo'
-			}
-			onBack={() => navigate('/task')}
-			actions={[
-				!isPrintView ? (
-					<span
-						key={'ExempleDetail-spanPrintViewKEY'}
-						style={{
-							cursor: 'pointer',
-							marginRight: 10,
-							color: theme.palette.secondary.main
-						}}
-						onClick={() => {
-							navigate(`/task/printview/${taskDoc._id}`);
-						}}>
-						<Print key={'ExempleDetail-spanPrintKEY'} />
-					</span>
-				) : (
-					<span
-						key={'ExempleDetail-spanNotPrintViewKEY'}
-						style={{
-							cursor: 'pointer',
-							marginRight: 10,
-							color: theme.palette.secondary.main
-						}}
-						onClick={() => {
-							navigate(`/task/view/${taskDoc._id}`);
-						}}>
-						<Close key={'ExempleDetail-spanCloseKEY'} />
-					</span>
-				)
-			]}>
-			<SimpleForm
-				key={'ExempleDetail-SimpleFormKEY'}
-				mode={screenState}
-				schema={taskApi.getSchema()}
-				doc={taskDoc}
-				onSubmit={handleSubmit}
-				loading={loading}>
-				<ImageCompactField key={'ExempleDetail-ImageCompactFieldKEY'} label={'Imagem Zoom+Slider'} name={'image'} />
-
-				<FormGroup key={'fieldsOne'}>
-					<TextField key={'f1-tituloKEY'} placeholder="Titulo" name="title" />
-					<TextField key={'f1-descricaoKEY'} placeholder="Descrição" name="description" />
-				</FormGroup>
-				<FormGroup key={'fieldsTwo'}>
-					<SelectField key={'f2-tipoKEY'} placeholder="Selecione um tipo" name="type" />
-					<SelectField key={'f2-multiTipoKEY'} placeholder="Selecione alguns tipos" name="typeMulti" />
-				</FormGroup>
-				<FormGroup key={'fieldsThree'} {...{ formType: 'subform', name: 'contacts' }}>
-					<TextMaskField key={'f3-TelefoneKEY'} placeholder="Telefone" name="phone" />
-					<TextMaskField key={'f3-CPFKEY'} placeholder="CPF" name="cpf" />
-				</FormGroup>
-				<FormGroup key={'fieldsFour'} {...{ formType: 'subformArray', name: 'tasks' }}>
-					<TextField key={'f4-nomeTarefaKEY'} placeholder="Nome da Tarefa" name="name" />
-					<TextField key={'f4-descricaoTarefaKEY'} placeholder="Descrição da Tarefa" name="description" />
-				</FormGroup>
-
-				<SliderField key={'ExempleDetail-SliderFieldKEY'} placeholder="Slider" name="slider" />
-
-				<RadioButtonField
-					key={'ExempleDetail-RadioKEY'}
-					placeholder="Opções da Tarefa"
-					name="statusRadio"
-					options={[
-						{ value: 'valA', label: 'Valor A' },
-						{ value: 'valB', label: 'Valor B' },
-						{ value: 'valC', label: 'Valor C' }
-					]}
-				/>
-
-				<FormGroup key={'fieldsFifth'}>
-					<AudioRecorder key={'f5-audioKEY'} placeholder="Áudio" name="audio" />
-				</FormGroup>
-
-				<UploadFilesCollection
-					key={'ExempleDetail-UploadsFilesKEY'}
-					name="files"
-					label={'Arquivos'}
-					doc={{ _id: taskDoc?._id }}
-				/>
-				<FormGroup key={'fieldsSixth'} {...{ name: 'chips' }}>
-					<ChipInput key={'f6-cipsKEY'} name="chip" placeholder="Chip" />
-				</FormGroup>
-				<div
-					key={'Buttons'}
-					style={{
-						display: 'flex',
-						flexDirection: 'row',
-						justifyContent: 'left',
-						paddingTop: 20,
-						paddingBottom: 20
+		<Box component="div" sx={{ ...taskDetailStyles.containerTaskDetail }}>
+			<Box component="div" sx={{ ...taskDetailStyles.contentLabelTaskDetail }}>
+				<Typography sx={{ ...taskDetailStyles.labelTaskDetail }}>
+					{screenState === 'edit' ? 'Editar Tarefa' : 'Adicionar Tarefa'}
+				</Typography>
+				<IconButton
+					onClick={() => {
+						closeComponent();
 					}}>
-					{!isPrintView ? (
-						<Button
-							key={'b1'}
-							style={{ marginRight: 10 }}
-							onClick={
-								screenState === 'edit'
-									? () => navigate(`/task/view/${taskDoc._id}`)
-									: () => navigate(`/task/list`)
-							}
-							color={'secondary'}
-							variant="contained">
-							{screenState === 'view' ? 'Voltar' : 'Cancelar'}
-						</Button>
-					) : null}
+					<Close color="primary" />
+				</IconButton>
+			</Box>
+			<Box component="div" sx={{ ...taskDetailStyles.formTaskDetail }}>
+				<SimpleForm
+					key={'Task-SimpleFormKEY'}
+					mode={screenState}
+					schema={taskApi.getSchema()}
+					doc={taskDoc}
+					onSubmit={handleSubmit}
+					loading={loading}>
+					<Box>
+						<TextField
+							key={'tituloKEY'}
+							fullWidth={true}
+							placeholder="Dê um título para sua tarefa"
+							name="title"
+							sx={{ ...taskDetailStyles.inputTaskDetail }}
+						/>
+						<TextField
+							multiline={true}
+							rows={5}
+							fullWidth={true}
+							placeholder="Adicione aqui, a descrição da tarefa"
+							key={'descricaoKEY'}
+							name="description"
+							sx={{ ...taskDetailStyles.inputTaskDetail }}
+						/>
 
-					{!isPrintView && screenState === 'view' ? (
-						<Button
-							key={'b2'}
-							onClick={() => {
-								navigate(`/task/edit/${taskDoc._id}`);
-							}}
-							color={'primary'}
-							variant="contained">
-							{'Editar'}
-						</Button>
-					) : null}
-					{!isPrintView && screenState !== 'view' ? (
-						<Button key={'b3'} color={'primary'} variant="contained" id="submit">
-							{'Salvar'}
-						</Button>
-					) : null}
-				</div>
-			</SimpleForm>
-		</PageLayout>
+						<SelectField
+							key={'tipoKEY'}
+							label="Categoria"
+							placeholder="Selecione um tipo"
+							name="category"
+							sx={{ ...taskDetailStyles.inputTaskDetail }}
+						/>
+
+						<Box component="div" sx={{ ...taskDetailStyles.contentButton }}>
+							<Button id="submit" sx={{ ...taskDetailStyles.buttonTaskDetail }}>
+								{screenState === 'edit' || screenState === 'create' ? 'Salvar' : 'Editar'}
+							</Button>
+						</Box>
+					</Box>
+				</SimpleForm>
+			</Box>
+		</Box>
 	);
+
+	function toggleStatusTask() {
+		if (taskDoc.createdby === user?._id) {
+			taskDoc.status = !taskDoc.status;
+			taskApi.update(taskDoc, (e: IMeteorError) => {
+				if (e) {
+					console.log('Error:', e);
+					showNotification &&
+						showNotification({
+							type: 'warning',
+							title: 'Operação não realizada!',
+							description: `Erro ao ${taskDoc.status ? 'concluir' : 'reabrir'} a tarefa ${taskDoc.title}: ${e.reason}`
+						});
+					taskDoc.status = !taskDoc.status;
+				}
+			});
+		} else {
+			showNotification &&
+				showNotification({
+					type: 'warning',
+					title: 'Operação não realizada!',
+					description: `Apenas o dono da tarefa pode ${taskDoc.status ? 'reabri-la' : 'concluí-la'}.`
+				});
+		}
+	}
 };
 
 interface ITaskDetailContainer extends IDefaultContainerProps {}
 
 export const TaskDetailContainer = withTracker((props: ITaskDetailContainer) => {
-	const { screenState, id, navigate, showNotification } = props;
+	const { screenState, id, navigate, showNotification, user } = props;
 
-	const subHandle = !!id ? taskApi.subscribe('taskDetail', { _id: id }) : null;
+	const subHandle = !!id ? taskApi.subscribe('getAllTasks', { _id: id }) : null;
 	const taskDoc = id && subHandle?.ready() ? taskApi.findOne({ _id: id }) : {};
 
 	return {
 		screenState,
+		user,
 		taskDoc,
 		save: (doc: ITask, _callback: () => void) => {
+			if (!doc.status) {
+				doc.status = false;
+				doc.username = user?.username;
+			}
 			const selectedAction = screenState === 'create' ? 'insert' : 'update';
 			taskApi[selectedAction](doc, (e: IMeteorError, r: string) => {
 				if (!e) {
@@ -189,7 +226,7 @@ export const TaskDetailContainer = withTracker((props: ITaskDetailContainer) => 
 						showNotification({
 							type: 'success',
 							title: 'Operação realizada!',
-							description: `O exemplo foi ${doc._id ? 'atualizado' : 'cadastrado'} com sucesso!`
+							description: `A tarefa foi ${doc._id ? 'atualizada' : 'cadastrada'} com sucesso!`
 						});
 				} else {
 					console.log('Error:', e);

@@ -3,7 +3,6 @@ import React from 'react';
 import Home from '../pages/Home/Home';
 import { SignUp } from '../pages/SignUp/SignUp';
 import Signout from '../pages/SignOut/Signout';
-import { EnrollAccount } from '../pages/EnrollAccount/EnrollAccount';
 import { EmailVerify } from '../pages/EmailVerify/EmailVerify';
 import { ResetPassword } from '/imports/ui/pages/ResetPassword/ResetPassword';
 import { SignIn } from '../pages/SignIn/Signin';
@@ -14,7 +13,7 @@ export const pagesRouterList = [
 		path: '/',
 		exact: true,
 		component: Home,
-		isProtected: false
+		isProtected: true
 	},
 	{
 		path: '/signin',

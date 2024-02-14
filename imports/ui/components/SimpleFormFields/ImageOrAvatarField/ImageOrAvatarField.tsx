@@ -1,28 +1,18 @@
 import React from 'react';
-
 import SimpleLabelView from '/imports/ui/components/SimpleLabelView/SimpleLabelView';
 import AvatarGeneratorField from '/imports/ui/components/SimpleFormFields/AvatarGeneratorField/AvatarGeneratorField';
 import ImageCompactField from '/imports/ui/components/SimpleFormFields/ImageCompactField/ImageCompactField';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-
+import { IBaseSimpleFormComponent } from '/imports/ui/components/InterfaceBaseSimpleFormComponent';
 import { imageOrAvatarStyle } from './ImageOrAvatarFieldStyle';
 import { hasValue } from '/imports/libs/hasValue';
 
 import PropTypes from 'prop-types';
 
 export default ({ name, label, value, onChange, readOnly, error, ...otherProps }: IBaseSimpleFormComponent) => {
-	const [imageOrAvatar, setImageOrAvatar] = React.useState(null);
+	const [imageOrAvatar, setImageOrAvatar] = React.useState('avatar');
 	const [img, setImg] = React.useState(value);
-
-	const handleOnChangeAvatar = (evt) => {
-		setImageOrAvatar(evt.target.value === '-' || evt.target.value === null ? null : 'avatar');
-		onChange({ ...evt, name }, { name, value: evt.target.value });
-	};
-	const handleOnChangeImage = (evt) => {
-		setImageOrAvatar(evt.target.value === '-' || evt.target.value === null ? null : 'image');
-		onChange({ ...evt, name }, { name, value: evt.target.value });
-	};
 
 	function TabPanel(props) {
 		const { children, value, index, ...other } = props;
@@ -87,7 +77,6 @@ export default ({ name, label, value, onChange, readOnly, error, ...otherProps }
 							name={`${name}_img`}
 							width={150}
 							height={150}
-							onChange={handleOnChangeImage}
 							error={error}
 							otherProps={otherProps}
 							value={value}
@@ -97,7 +86,6 @@ export default ({ name, label, value, onChange, readOnly, error, ...otherProps }
 					{!imageOrAvatar || imageOrAvatar === 'avatar' ? (
 						<AvatarGeneratorField
 							name={`${name}_avt`}
-							onChange={handleOnChangeAvatar}
 							error={error}
 							otherProps={otherProps}
 							value={value}

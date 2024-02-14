@@ -1,327 +1,327 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import { taskApi } from '../../api/taskApi';
-import { userprofileApi } from '../../../../userprofile/api/UserProfileApi';
-import { SimpleTable } from '/imports/ui/components/SimpleTable/SimpleTable';
-import Add from '@mui/icons-material/Add';
-import Delete from '@mui/icons-material/Delete';
-import Fab from '@mui/material/Fab';
-import TablePagination from '@mui/material/TablePagination';
+import { ListTask } from '/imports/modules/task/ui/components/listTask';
+import Pagination from '@mui/material/Pagination';
+import PaginationItem from '@mui/material/PaginationItem';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 import { ReactiveVar } from 'meteor/reactive-var';
-import { initSearch } from '/imports/libs/searchUtils';
-import * as appStyle from '/imports/materialui/styles';
+import AddIcon from '@mui/icons-material/Add';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { myTasksStyle } from './style/taskListStyle';
 import { nanoid } from 'nanoid';
-import TextField from '/imports/ui/components/SimpleFormFields/TextField/TextField';
-import SearchDocField from '/imports/ui/components/SimpleFormFields/SearchDocField/SearchDocField';
-import { IDefaultContainerProps, IDefaultListProps, IMeteorError } from '/imports/typings/BoilerplateDefaultTypings';
+import { IDefaultContainerProps, IDefaultListProps } from '/imports/typings/BoilerplateDefaultTypings';
 import { ITask } from '../../api/taskSch';
+import { FixedMenuLayoutContext } from '../../../../ui/layouts/FixedMenuLayout';
 import { IConfigList } from '/imports/typings/IFilterProperties';
-import { Recurso } from '../../config/Recursos';
-import { RenderComPermissao } from '/imports/seguranca/ui/components/RenderComPermisao';
 import { showLoading } from '/imports/ui/components/Loading/Loading';
-import { ComplexTable } from '/imports/ui/components/ComplexTable/ComplexTable';
-import ToggleField from '/imports/ui/components/SimpleFormFields/ToggleField/ToggleField';
-import { PageLayout } from '/imports/ui/layouts/PageLayout';
+import { IUserProfile } from '/imports/userprofile/api/UserProfileSch';
+import { SearchTask } from '../components/searchTask';
+import TextField from '/imports/ui/components/SimpleFormFields/TextField/TextField';
 
 interface ITaskList extends IDefaultListProps {
-	remove: (doc: ITask) => void;
-	viewComplexTable: boolean;
-	setViewComplexTable: (_enable: boolean) => void;
-	tasks: ITask[];
-	setFilter: (newFilter: Object) => void;
-	clearFilter: () => void;
+	tasksCompleted: ITask[];
+	tasksNotCompleted: ITask[];
+	user: IUserProfile;
+	showNotification: (options?: Object | undefined) => void;
+	showDeleteDialog: (title: string, message: string, doc: Object, remove: (doc: any) => void) => void;
+	showDrawer: (options?: Object | undefined) => void;
 }
 
 const TaskList = (props: ITaskList) => {
 	const {
-		tasks,
+		tasksCompleted,
+		tasksNotCompleted,
 		navigate,
-		remove,
 		showDeleteDialog,
-		onSearch,
-		total,
-		loading,
-		viewComplexTable,
-		setViewComplexTable,
-		setFilter,
-		clearFilter,
+		user,
+		showNotification,
+		showDrawer,
 		setPage,
-		setPageSize,
-		searchBy,
-		pageProperties,
-		isMobile
+		tasksCompletedLength,
+		tasksNotCompletedLength
 	} = props;
 
-    const idTask = nanoid();
+	const { handleOcultarAppBar, handleExibirHeaderBar } = useContext(FixedMenuLayoutContext);
 
-	const onClick = (_event: React.SyntheticEvent, id: string) => {
-		navigate('/task/view/' + id);
-	};
+	useEffect(() => {
+		handleExibirHeaderBar('/');
+		return () => {
+			handleOcultarAppBar();
+			handleExibirHeaderBar();
+		};
+	}, []);
 
-	const handleChangePage = (_event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null, newPage: number) => {
-		setPage(newPage + 1);
-	};
-
-	const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setPageSize(parseInt(event.target.value, 10));
-		setPage(1);
-	};
-
-	const [text, setText] = React.useState(searchBy || '');
+	const [text, setText] = React.useState<string>('');
 
 	const change = (e: React.ChangeEvent<HTMLInputElement>) => {
-		clearFilter();
-		if (text.length !== 0 && e.target.value.length === 0) {
-			onSearch();
-		}
+		// clearFilter();
+		// if (text.length !== 0 && e.target.value.length === 0) {
+		// 	onSearch();
+		// }
+
 		setText(e.target.value);
 	};
-	const keyPress = (_e: React.SyntheticEvent) => {
-		// if (e.key === 'Enter') {
-		if (text && text.trim().length > 0) {
-			onSearch(text.trim());
-		} else {
-			onSearch();
-		}
-		// }
+	// const keyPress = (_e: React.SyntheticEvent) => {
+	// 	// if (e.key === 'Enter') {
+	// 	if (text && text.trim().length > 0) {
+	// 		onSearch(text.trim());
+	// 	} else {
+	// 		onSearch();
+	// 	}
+	// 	// }
+	// };
+
+	// const click = (_e: React.SyntheticEvent) => {
+	// 	if (text && text.trim().length > 0) {
+	// 		onSearch(text.trim());
+	// 	} else {
+	// 		onSearch();
+	// 	}
+	// };
+
+	// const handleSearchDocChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	// 	!!e.target.value ? setFilter({ createdby: e.target.value }) : clearFilter();
+	// };
+
+	const [openNotCompletedTasks, setOpenNotCompletedTasks] = useState<boolean>(true);
+	const [openCompletedTasks, setOpenCompletedTasks] = useState<boolean>(true);
+
+	const idTask = nanoid();
+
+	const handleChangePageNotCompletedTasks = (newPage: number) => {
+		console.log(newPage);
+		setPage(newPage, false);
 	};
 
-	const click = (_e: React.SyntheticEvent) => {
-		if (text && text.trim().length > 0) {
-			onSearch(text.trim());
-		} else {
-			onSearch();
-		}
+	const handleChangePageCompletedTasks = (newPage: number) => {
+		console.log(newPage);
+		setPage(newPage, true);
 	};
-
-	const callRemove = (doc: ITask) => {
-		const title = 'Remover exemplo';
-		const message = `Deseja remover o exemplo "${doc.title}"?`;
-		showDeleteDialog && showDeleteDialog(title, message, doc, remove);
-	};
-
-	const handleSearchDocChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		!!e.target.value ? setFilter({ createdby: e.target.value }) : clearFilter();
-	};
-
-	const { image, title, description, nomeUsuario } = taskApi.getSchema();
-	const schemaReduzido = { image, title, description, nomeUsuario: { type: String, label: 'Criado por' } };
 
 	return (
-		<PageLayout title={'Lista de Exemplos'} actions={[]}>
-			<SearchDocField
-				api={userprofileApi}
-				subscribe={'getListOfusers'}
-				getOptionLabel={(doc) => doc.username || 'error'}
-				sort={{ username: 1 }}
-				textToQueryFilter={(textoPesquisa) => {
-					textoPesquisa = textoPesquisa.replace(/[+[\\?()*]/g, '\\$&');
-					return { username: new RegExp(textoPesquisa, 'i') };
-				}}
-				autocompleteOptions={{ noOptionsText: 'Não encontrado' }}
-				name={'userId'}
-				label={'Pesquisar com SearchDocField'}
-				onChange={handleSearchDocChange}
-				placeholder={'Todos'}
-				showAll={false}
-				key={'SearchDocKey'}
-			/>
-
-			{!isMobile && (
-				<ToggleField
-					label={'Habilitar ComplexTable'}
-					value={viewComplexTable}
-					onChange={(evt: { target: { value: boolean } }) => {
-						setViewComplexTable(evt.target.value);
-					}}
-				/>
-			)}
-			{(!viewComplexTable || isMobile) && (
-				<>
+		<Box component="div" sx={{ ...myTasksStyle.bodyMyTasks }}>
+			<Box component="div" sx={{ ...myTasksStyle.containerMyTasks }}>
+				<Box component="div" sx={{ ...myTasksStyle.contentSearch }}>
 					<TextField
 						name={'pesquisar'}
 						label={'Pesquisar'}
 						value={text}
 						onChange={change}
-						onKeyPress={keyPress}
-						placeholder="Digite aqui o que deseja pesquisa..."
-						action={{ icon: 'search', onClick: click }}
+						//onKeyPress={keyPress}
+						placeholder="Digite aqui o que deseja pesquisar..."
+						//action={{ icon: 'search', onClick: click }}
 					/>
-
-					<SimpleTable
-						schema={schemaReduzido}
-						data={tasks}
-						onClick={onClick}
-						actions={[{ icon: <Delete />, id: 'delete', onClick: callRemove }]}
+				</Box>
+				{text.trim() !== '' ? (
+					<SearchTask
+						text={text}
+						showNotification={showNotification}
+						showDeleteDialog={showDeleteDialog}
+						showDrawer={showDrawer}
+						user={user}
 					/>
-				</>
-			)}
-
-			{!isMobile && viewComplexTable && (
-				<ComplexTable
-					data={tasks}
-					schema={schemaReduzido}
-					onRowClick={(row) => navigate('/task/view/' + row.id)}
-					searchPlaceholder={'Pesquisar exemplo'}
-					onDelete={callRemove}
-					onEdit={(row) => navigate('/task/edit/' + row._id)}
-					toolbar={{
-						selectColumns: true,
-						exportTable: { csv: true, print: true },
-						searchFilter: true
-					}}
-					onFilterChange={onSearch}
-					loading={loading}
-				/>
-			)}
-
-			<div
-				style={{
-					width: '100%',
-					display: 'flex',
-					flexDirection: 'row',
-					justifyContent: 'center'
-				}}>
-				<TablePagination
-					style={{ width: 'fit-content', overflow: 'unset' }}
-					rowsPerPageOptions={[10, 25, 50, 100]}
-					labelRowsPerPage={''}
-					component="div"
-					count={total || 0}
-					rowsPerPage={pageProperties.pageSize}
-					page={pageProperties.currentPage - 1}
-					onPageChange={handleChangePage}
-					onRowsPerPageChange={handleChangeRowsPerPage}
-					labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
-					SelectProps={{
-						inputProps: { 'aria-label': 'rows per page' }
-					}}
-				/>
-			</div>
-
-			<RenderComPermissao recursos={[Recurso.EXAMPLE_CREATE]}>
-				<div
-					style={{
-						position: 'fixed',
-						bottom: isMobile ? 80 : 30,
-						right: 30
-					}}>
-					<Fab id={'add'} onClick={() => navigate(`/task/create/${idTask}`)} color={'primary'}>
-						<Add />
-					</Fab>
-				</div>
-			</RenderComPermissao>
-		</PageLayout>
+				) : (
+					<>
+						<Box
+							component="div"
+							sx={{
+								...myTasksStyle.boxMyTasks
+							}}>
+							<Box
+								component="div"
+								sx={{
+									...myTasksStyle.titleMyTasks
+								}}
+								onClick={() => toggleBoxNotCompletedTasks()}>
+								{openNotCompletedTasks ? (
+									<KeyboardArrowUpIcon fontSize="large" />
+								) : (
+									<KeyboardArrowDownIcon fontSize="large" />
+								)}
+								<Typography sx={{ ...myTasksStyle.labelTitleMyTasks }}>
+									Não Concluídas ({tasksNotCompletedLength})
+								</Typography>
+							</Box>
+							<Divider />
+							<Box
+								component="div"
+								sx={{
+									...(openNotCompletedTasks ? myTasksStyle.openList : myTasksStyle.closeList),
+									height: openNotCompletedTasks
+										? `calc((83.5px * ${tasksNotCompleted.length}) + ${Math.ceil(tasksNotCompletedLength / 4) <= 1 ? '0px' : '62px'})`
+										: '0px'
+								}}>
+								<ListTask
+									user={user}
+									tasks={tasksNotCompleted}
+									showDeleteDialog={showDeleteDialog}
+									showDrawer={showDrawer}
+									showNotification={showNotification}
+								/>
+								{Math.ceil(tasksNotCompletedLength / 4) <= 1 ? (
+									<></>
+								) : (
+									<Box sx={{ ...myTasksStyle.paginationContent }}>
+										<Pagination
+											style={{ margin: '15px 0px' }}
+											onChange={(e, p) => handleChangePageNotCompletedTasks(p)}
+											color="primary"
+											count={Math.ceil(tasksNotCompletedLength / 4)}
+											shape="rounded"
+											renderItem={(item) => (
+												<PaginationItem slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />
+											)}
+										/>
+									</Box>
+								)}
+							</Box>
+						</Box>
+						<Box
+							component="div"
+							sx={{
+								...myTasksStyle.boxMyTasks
+							}}>
+							<Box component="div" sx={{ ...myTasksStyle.titleMyTasks }} onClick={() => toggleBoxCompletedTasks()}>
+								{openCompletedTasks ? (
+									<KeyboardArrowUpIcon fontSize="large" />
+								) : (
+									<KeyboardArrowDownIcon fontSize="large" />
+								)}
+								<Typography sx={{ ...myTasksStyle.labelTitleMyTasks }}>Concluídas ({tasksCompletedLength})</Typography>
+							</Box>
+							<Divider />
+							<Box
+								component="div"
+								sx={{
+									...(openCompletedTasks ? myTasksStyle.openList : myTasksStyle.closeList),
+									height: openCompletedTasks
+										? `calc((83.5px * ${tasksCompleted.length}) + ${Math.ceil(tasksCompletedLength / 4) <= 1 ? '0px' : '62px'})`
+										: '0px'
+								}}>
+								<ListTask
+									user={user}
+									tasks={tasksCompleted}
+									showDeleteDialog={showDeleteDialog}
+									showDrawer={showDrawer}
+									showNotification={showNotification}
+								/>
+								{Math.ceil(tasksCompletedLength / 4) <= 1 ? (
+									<></>
+								) : (
+									<Box sx={{ ...myTasksStyle.paginationContent }}>
+										<Pagination
+											style={{ margin: '15px 0px' }}
+											onChange={(e, p) => handleChangePageCompletedTasks(p)}
+											color="primary"
+											count={Math.ceil(tasksCompletedLength / 4)}
+											shape="rounded"
+											renderItem={(item) => (
+												<PaginationItem slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />
+											)}
+										/>
+									</Box>
+								)}
+							</Box>
+						</Box>
+					</>
+				)}
+				<Box component="div" sx={{ ...myTasksStyle.contentRouterAddTask }}>
+					<Button
+						sx={{ ...myTasksStyle.routerAddTask }}
+						startIcon={<AddIcon fontSize="large" />}
+						onClick={() => {
+							showDrawer && showDrawer({ url: `/task/create/${idTask}` });
+						}}>
+						{'Adicionar tarefa'}
+					</Button>
+				</Box>
+			</Box>
+		</Box>
 	);
+
+	function toggleBoxCompletedTasks() {
+		setOpenCompletedTasks(!openCompletedTasks);
+	}
+
+	function toggleBoxNotCompletedTasks() {
+		setOpenNotCompletedTasks(!openNotCompletedTasks);
+	}
 };
 
-export const subscribeConfig = new ReactiveVar<IConfigList & { viewComplexTable: boolean }>({
-	pageProperties: {
-		currentPage: 1,
-		pageSize: 25
-	},
-	sortProperties: { field: 'createdat', sortAscending: true },
-	filter: {},
-	searchBy: null,
-	viewComplexTable: false
+export const pageTasksCompleted = new ReactiveVar<IConfigList>({
+	pageProperties: { currentPage: 1, pageSize: 4 }
 });
 
-const taskSearch = initSearch(
-	taskApi, // API
-	subscribeConfig, // ReactiveVar subscribe configurations
-	['title', 'description'] // list of fields
-);
-
-let onSearchTaskTyping: NodeJS.Timeout;
-
-const viewComplexTable = new ReactiveVar(false);
+export const pageTasksNotCompleted = new ReactiveVar<IConfigList>({
+	pageProperties: { currentPage: 1, pageSize: 4 }
+});
 
 export const TaskListContainer = withTracker((props: IDefaultContainerProps) => {
-	const { showNotification } = props;
+	const configCompletedTasks = pageTasksCompleted.get();
+	const configNotCompletedTasks = pageTasksNotCompleted.get();
 
-	//Reactive Search/Filter
-	const config = subscribeConfig.get();
-	const sort = {
-		[config.sortProperties.field]: config.sortProperties.sortAscending ? 1 : -1
-	};
-	taskSearch.setActualConfig(config);
+	const subHandleCompletedTasks = taskApi.subscribe('getTaskCompleted');
+	const tasksCompleted = subHandleCompletedTasks?.ready()
+		? taskApi
+				.find(
+					{ status: true },
+					{
+						sort: {
+							createdat: -1
+						},
+						limit: configCompletedTasks.pageProperties.pageSize,
+						skip: (configCompletedTasks.pageProperties.currentPage - 1) * configCompletedTasks.pageProperties.pageSize
+					}
+				)
+				.fetch()
+		: [];
+	const tasksCompletedLength = subHandleCompletedTasks?.ready() ? taskApi.find({ status: true }).fetch().length : [];
 
-	//Subscribe parameters
-	const filter = { ...config.filter };
-	// const filter = filtroPag;
-	const limit = config.pageProperties.pageSize;
-	const skip = (config.pageProperties.currentPage - 1) * config.pageProperties.pageSize;
-
-	//Collection Subscribe
-	const subHandle = taskApi.subscribe('taskList', filter, {
-		sort,
-		limit,
-		skip
-	});
-	const tasks = subHandle?.ready() ? taskApi.find(filter, { sort }).fetch() : [];
+	const subHandleNotCompletedTasks = taskApi.subscribe('getTaskNotCompleted');
+	const tasksNotCompleted = subHandleNotCompletedTasks?.ready()
+		? taskApi
+				.find(
+					{ status: false },
+					{
+						sort: {
+							createdat: -1
+						},
+						limit: configNotCompletedTasks.pageProperties.pageSize,
+						skip:
+							(configNotCompletedTasks.pageProperties.currentPage - 1) * configNotCompletedTasks.pageProperties.pageSize
+					}
+				)
+				.fetch()
+		: [];
+	const tasksNotCompletedLength = subHandleNotCompletedTasks?.ready()
+		? taskApi.find({ status: false }).fetch().length
+		: 0;
 
 	return {
-		tasks,
-		loading: !!subHandle && !subHandle.ready(),
-		remove: (doc: ITask) => {
-			taskApi.remove(doc, (e: IMeteorError) => {
-				if (!e) {
-					showNotification &&
-						showNotification({
-							type: 'success',
-							title: 'Operação realizada!',
-							description: `O exemplo foi removido com sucesso!`
-						});
-				} else {
-					console.log('Error:', e);
-					showNotification &&
-						showNotification({
-							type: 'warning',
-							title: 'Operação não realizada!',
-							description: `Erro ao realizar a operação: ${e.reason}`
-						});
-				}
-			});
-		},
-		viewComplexTable: viewComplexTable.get(),
-		setViewComplexTable: (enableComplexTable: boolean) => viewComplexTable.set(enableComplexTable),
-		searchBy: config.searchBy,
-		onSearch: (...params: any) => {
-			onSearchTaskTyping && clearTimeout(onSearchTaskTyping);
-			onSearchTaskTyping = setTimeout(() => {
-				config.pageProperties.currentPage = 1;
-				subscribeConfig.set(config);
-				taskSearch.onSearch(...params);
-			}, 1000);
-		},
-		total: subHandle ? subHandle.total : tasks.length,
-		pageProperties: config.pageProperties,
-		filter,
-		sort,
-		setPage: (page = 1) => {
-			config.pageProperties.currentPage = page;
-			subscribeConfig.set(config);
-		},
-		setFilter: (newFilter = {}) => {
-			config.filter = { ...filter, ...newFilter };
-			Object.keys(config.filter).forEach((key) => {
-				if (config.filter[key] === null || config.filter[key] === undefined) {
-					delete config.filter[key];
-				}
-			});
-			subscribeConfig.set(config);
-		},
-		clearFilter: () => {
-			config.filter = {};
-			subscribeConfig.set(config);
-		},
-		setSort: (sort = { field: 'createdat', sortAscending: true }) => {
-			config.sortProperties = sort;
-			subscribeConfig.set(config);
-		},
-		setPageSize: (size = 25) => {
-			config.pageProperties.pageSize = size;
-			subscribeConfig.set(config);
+		tasksCompleted,
+		tasksNotCompleted,
+		tasksCompletedLength: tasksCompletedLength,
+		tasksNotCompletedLength: tasksNotCompletedLength,
+		loading:
+			!!subHandleNotCompletedTasks &&
+			!subHandleNotCompletedTasks.ready() &&
+			!!subHandleCompletedTasks &&
+			!subHandleCompletedTasks.ready(),
+		setPage: (page = 1, completed: boolean) => {
+			if (completed) {
+				configCompletedTasks.pageProperties.currentPage = page;
+				pageTasksCompleted.set(configCompletedTasks);
+			} else {
+				configNotCompletedTasks.pageProperties.currentPage = page;
+				pageTasksNotCompleted.set(configNotCompletedTasks);
+			}
 		}
 	};
 })(showLoading(TaskList));
