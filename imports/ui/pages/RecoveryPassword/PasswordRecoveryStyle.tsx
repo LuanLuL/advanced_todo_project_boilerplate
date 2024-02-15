@@ -4,13 +4,14 @@ export const passwordRecoveryStyle = {
 	containerRecoveryPassword: {
 		padding: '0px 20px',
 		width: '100%',
-		marginTop: '80px',
+		marginTop: { xs: '0px', sm: '60px', md: '60px', lg: '60px', xl: '60px' },
+		marginBottom: '50px',
 		backgroundColor: secondary,
 		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'center',
 		alignItems: 'center',
-		gap: '120px'
+		gap: { xs: '60px', sm: '60px', md: '80px', lg: '80px', xl: '80px' }
 	},
 	labelAccessSystem: {
 		textAlign: 'center',
@@ -26,7 +27,7 @@ export const passwordRecoveryStyle = {
 		maxWidth: 600
 	},
 	containerButtonOptions: {
-		marginTop: 10,
+		marginTop: { xs: '60px', sm: '60px', md: '70px', lg: '70px', xl: '70px' },
 		display: 'flex',
 		flexDirection: 'row',
 		justifyContent: 'space-between',

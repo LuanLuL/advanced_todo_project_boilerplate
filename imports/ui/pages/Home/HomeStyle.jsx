@@ -27,19 +27,19 @@ const homeStyles = {
 	},
 	containerHome: {
 		maxWidth: '960px',
-		padding: '10px',
-		margin: '60px auto'
+		padding: '10px 24px',
+		margin: { xs: '40px auto', sm: '60px auto', md: '60px auto', lg: '60px auto', xl: '60px auto' }
 	},
 	contentLabelHome: {
 		display: 'flex',
 		flexDirection: 'column',
-		gap: '31px'
+		gap: { xs: '25px', sm: '31px', md: '31px', lg: '31px', xl: '31px' }
 	},
 	mainLabelHome: {
 		color: primary,
 		fontFamily: '"Roboto", sans-serif',
 		fontWeight: 'bold',
-		fontSize: '60px'
+		fontSize: { xs: '45px', sm: '60px', md: '60px', lg: '60px', xl: '60px' }
 	},
 	descriptionLabelHome: {
 		fontFamily: '"Roboto", sans-serif',
@@ -48,7 +48,7 @@ const homeStyles = {
 	contentListHome: {
 		display: 'flex',
 		flexDirection: 'column',
-		margin: '74px 0px 0px 0px'
+		marginTop: { xs: '45px', sm: '74px', md: '74px', lg: '74px', xl: '74px' }
 	},
 	subLabelHome: {
 		color: primary,

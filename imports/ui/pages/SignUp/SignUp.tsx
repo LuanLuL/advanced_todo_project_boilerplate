@@ -127,7 +127,8 @@ export const SignUp = (props: ISignUp) => {
 			</Box>
 			<Box sx={{ ...signUpStyle.containerRouterSignIn }}>
 				<Typography sx={{ ...signUpStyle.routersSignUp }}>
-					Já tem uma conta? Faça login clicando{' '}
+					Já tem uma conta? <br />
+					Faça login clicando{' '}
 					<Link style={{ ...signUpStyle.routersSignUp }} to="/signin" id="newUser" color={'primary'}>
 						aqui
 					</Link>

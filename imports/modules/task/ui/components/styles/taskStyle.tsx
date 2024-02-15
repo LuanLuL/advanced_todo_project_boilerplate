@@ -14,8 +14,6 @@
 
  */
 
-import { isMobile } from '/imports/libs/deviceVerify';
-
 const taskStyles = {
 	containerTask: {
 		'&: hover': {

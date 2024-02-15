@@ -9,6 +9,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import MenuItem from '@mui/material/MenuItem';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { appTopMenuStyle } from './AppTopMenuStyle';
+import { isMobile } from '/imports/libs/deviceVerify';
 
 interface IAppTopMenu extends ILayoutProps {
 	activeGoBack: string | undefined;
@@ -28,12 +29,11 @@ export const AppTopMenu = (props: IAppTopMenu) => {
 
 	const viewProfile = () => {
 		handleClose();
-		showDrawer && showDrawer({ title: 'Usuário', url: `/userprofile/view/${user._id}` });
-	};
-
-	const viewProfileMobile = () => {
-		handleClose();
-		showWindow && showWindow({ title: 'Usuário', url: `/userprofile/view/${user._id}` });
+		if (isMobile) {
+			showWindow && showWindow({ title: 'Usuário', url: `/userprofile/view/${user._id}` });
+		} else {
+			showDrawer && showDrawer({ title: 'Usuário', url: `/userprofile/view/${user._id}` });
+		}
 	};
 
 	const handleMenu = (event: React.SyntheticEvent) => {

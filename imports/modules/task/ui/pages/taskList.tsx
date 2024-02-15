@@ -3,6 +3,7 @@ import { withTracker } from 'meteor/react-meteor-data';
 import { taskApi } from '../../api/taskApi';
 import { ListTask } from '/imports/modules/task/ui/components/listTask';
 import Pagination from '@mui/material/Pagination';
+import { isMobile } from '/imports/libs/deviceVerify';
 import PaginationItem from '@mui/material/PaginationItem';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -24,6 +25,7 @@ import { showLoading } from '/imports/ui/components/Loading/Loading';
 import { IUserProfile } from '/imports/userprofile/api/UserProfileSch';
 import { SearchTask } from '../components/searchTask';
 import TextField from '/imports/ui/components/SimpleFormFields/TextField/TextField';
+import { useNavigate } from 'react-router-dom';
 
 interface ITaskList extends IDefaultListProps {
 	tasksCompleted: ITask[];
@@ -38,7 +40,6 @@ const TaskList = (props: ITaskList) => {
 	const {
 		tasksCompleted,
 		tasksNotCompleted,
-		navigate,
 		showDeleteDialog,
 		user,
 		showNotification,
@@ -49,6 +50,8 @@ const TaskList = (props: ITaskList) => {
 	} = props;
 
 	const { handleOcultarAppBar, handleExibirHeaderBar } = useContext(FixedMenuLayoutContext);
+
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		handleExibirHeaderBar('/');
@@ -61,34 +64,8 @@ const TaskList = (props: ITaskList) => {
 	const [text, setText] = React.useState<string>('');
 
 	const change = (e: React.ChangeEvent<HTMLInputElement>) => {
-		// clearFilter();
-		// if (text.length !== 0 && e.target.value.length === 0) {
-		// 	onSearch();
-		// }
-
 		setText(e.target.value);
 	};
-	// const keyPress = (_e: React.SyntheticEvent) => {
-	// 	// if (e.key === 'Enter') {
-	// 	if (text && text.trim().length > 0) {
-	// 		onSearch(text.trim());
-	// 	} else {
-	// 		onSearch();
-	// 	}
-	// 	// }
-	// };
-
-	// const click = (_e: React.SyntheticEvent) => {
-	// 	if (text && text.trim().length > 0) {
-	// 		onSearch(text.trim());
-	// 	} else {
-	// 		onSearch();
-	// 	}
-	// };
-
-	// const handleSearchDocChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-	// 	!!e.target.value ? setFilter({ createdby: e.target.value }) : clearFilter();
-	// };
 
 	const [openNotCompletedTasks, setOpenNotCompletedTasks] = useState<boolean>(true);
 	const [openCompletedTasks, setOpenCompletedTasks] = useState<boolean>(true);
@@ -115,7 +92,7 @@ const TaskList = (props: ITaskList) => {
 						value={text}
 						onChange={change}
 						//onKeyPress={keyPress}
-						placeholder="Digite aqui o que deseja pesquisar..."
+						placeholder="Pesquisar tarefas..."
 						//action={{ icon: 'search', onClick: click }}
 					/>
 				</Box>
@@ -236,10 +213,8 @@ const TaskList = (props: ITaskList) => {
 					<Button
 						sx={{ ...myTasksStyle.routerAddTask }}
 						startIcon={<AddIcon fontSize="large" />}
-						onClick={() => {
-							showDrawer && showDrawer({ url: `/task/create/${idTask}` });
-						}}>
-						{'Adicionar tarefa'}
+						onClick={() => goToAdd()}>
+						{'Adicionar'}
 					</Button>
 				</Box>
 			</Box>
@@ -252,6 +227,14 @@ const TaskList = (props: ITaskList) => {
 
 	function toggleBoxNotCompletedTasks() {
 		setOpenNotCompletedTasks(!openNotCompletedTasks);
+	}
+
+	function goToAdd() {
+		if (isMobile) {
+			navigate(`/task/create/${idTask}`);
+		} else {
+			showDrawer && showDrawer({ url: `/task/create/${idTask}` });
+		}
 	}
 };
 

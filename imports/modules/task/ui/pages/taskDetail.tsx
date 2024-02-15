@@ -1,11 +1,12 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { isMobile } from '/imports/libs/deviceVerify';
+import { FixedMenuLayoutContext } from '../../../../ui/layouts/FixedMenuLayout';
 import { withTracker } from 'meteor/react-meteor-data';
 import { taskApi } from '../../api/taskApi';
 import SimpleForm from '../../../../ui/components/SimpleForm/SimpleForm';
 import Button from '@mui/material/Button';
 import TextField from '/imports/ui/components/SimpleFormFields/TextField/TextField';
-import SelectField from '../../../../ui/components/SimpleFormFields/SelectField/SelectField';
-import { ITask } from '../../api/taskSch';
+import { ITask, taskSch } from '../../api/taskSch';
 import { IDefaultContainerProps, IDefaultDetailProps, IMeteorError } from '/imports/typings/BoilerplateDefaultTypings';
 import { Loading, showLoading } from '/imports/ui/components/Loading/Loading';
 import Close from '@mui/icons-material/Close';
@@ -18,6 +19,8 @@ import { IUserProfile } from '/imports/userprofile/api/UserProfileSch';
 import { taskStyles } from '../components/styles/taskStyle';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+import { SwitchField } from '/imports/ui/components/SimpleFormFields/SwitchField/SwitchField';
+import SelectField from '/imports/ui/components/SimpleFormFields/SelectField/SelectField';
 
 interface ITaskDetail extends IDefaultDetailProps {
 	taskDoc: ITask;
@@ -29,15 +32,20 @@ interface ITaskDetail extends IDefaultDetailProps {
 const TaskDetail = (props: ITaskDetail) => {
 	const { screenState, loading, taskDoc, save, closeComponent, navigate, user } = props;
 
-	if (screenState === 'edit' && taskDoc?.status === true) {
-		navigate('/task');
-	}
-
-	console.log('TAREFA === ', taskDoc);
-
 	if (!user) {
 		return <Loading />;
 	}
+
+	const toggleIsMobile = !isMobile;
+
+	const { handleExibirHeaderBar } = useContext(FixedMenuLayoutContext);
+
+	useEffect(() => {
+		if (isMobile) {
+			handleExibirHeaderBar('/task');
+		}
+		return;
+	}, [isMobile]);
 
 	const handleSubmit = (doc: ITask) => {
 		save(doc);
@@ -68,12 +76,14 @@ const TaskDetail = (props: ITaskDetail) => {
 							{taskDoc.title}
 						</Typography>
 					</Box>
-					<IconButton
-						onClick={() => {
-							closeComponent();
-						}}>
-						<Close color="primary" />
-					</IconButton>
+					{toggleIsMobile && (
+						<IconButton
+							onClick={() => {
+								closeComponent();
+							}}>
+							<Close color="primary" />
+						</IconButton>
+					)}
 				</Box>
 				<Box component="div" sx={{ ...taskDetailStyles.formTaskDetail }}>
 					<Typography sx={{ ...taskDetailStyles.descriptionTitle }}>{'Descrição'}</Typography>
@@ -105,9 +115,9 @@ const TaskDetail = (props: ITaskDetail) => {
 						)}
 					</Box>
 					<Box sx={{ ...taskDetailStyles.finalContent }}>
-						<Typography component="p" sx={{ ...taskStyles.subLabelTask }}>
+						<Typography component="p" sx={{ ...taskDetailStyles.subLabelTask }}>
 							Criada por:{' '}
-							<Typography component="span" sx={{ ...taskStyles.subLabelTask, ...taskStyles.userNameTask }}>
+							<Typography component="span" sx={{ ...taskDetailStyles.subLabelTask, ...taskStyles.userNameTask }}>
 								{taskDoc.createdby === user?._id ? 'Você' : taskDoc.username}
 							</Typography>
 						</Typography>
@@ -123,12 +133,14 @@ const TaskDetail = (props: ITaskDetail) => {
 				<Typography sx={{ ...taskDetailStyles.labelTaskDetail }}>
 					{screenState === 'edit' ? 'Editar Tarefa' : 'Adicionar Tarefa'}
 				</Typography>
-				<IconButton
-					onClick={() => {
-						closeComponent();
-					}}>
-					<Close color="primary" />
-				</IconButton>
+				{toggleIsMobile && (
+					<IconButton
+						onClick={() => {
+							closeComponent();
+						}}>
+						<Close color="primary" />
+					</IconButton>
+				)}
 			</Box>
 			<Box component="div" sx={{ ...taskDetailStyles.formTaskDetail }}>
 				<SimpleForm
@@ -155,14 +167,15 @@ const TaskDetail = (props: ITaskDetail) => {
 							name="description"
 							sx={{ ...taskDetailStyles.inputTaskDetail }}
 						/>
+						<SwitchField key={'tipoKEY'} label="Categoria" name="category" schema={taskSch.category} />
 
-						<SelectField
+						{/* <SelectField
 							key={'tipoKEY'}
 							label="Categoria"
 							placeholder="Selecione um tipo"
 							name="category"
 							sx={{ ...taskDetailStyles.inputTaskDetail }}
-						/>
+						/> */}
 
 						<Box component="div" sx={{ ...taskDetailStyles.contentButton }}>
 							<Button id="submit" sx={{ ...taskDetailStyles.buttonTaskDetail }}>

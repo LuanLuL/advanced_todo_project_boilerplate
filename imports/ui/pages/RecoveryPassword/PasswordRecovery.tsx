@@ -6,6 +6,7 @@ import { Accounts } from 'meteor/accounts-base';
 import TextField from '../../components/SimpleFormFields/TextField/TextField';
 import Button from '@mui/material/Button';
 import SimpleForm from '/imports/ui/components/SimpleForm/SimpleForm';
+import { signUpStyle } from '../SignUp/SignUpStyle';
 import Typography from '@mui/material/Typography';
 import { passwordRecoveryStyle } from './PasswordRecoveryStyle';
 import { IDefaultContainerProps } from '/imports/typings/BoilerplateDefaultTypings';
@@ -51,12 +52,13 @@ export const PasswordRecovery = (props: IDefaultContainerProps) => {
 
 	useEffect(() => {
 		handleOcultarAppBar();
-		return () => handleExibirAppBar();
 	}, []);
 
 	return (
 		<Container sx={{ ...passwordRecoveryStyle.containerRecoveryPassword }}>
-			<Typography sx={{ ...passwordRecoveryStyle.labelAccessSystem }}>{'Acessar o sistema'}</Typography>
+			<Box>
+				<Typography sx={{ ...signUpStyle.labelRegisterSystem, sm: { fontSize: '20px' } }}>Acessar o sistema</Typography>
+			</Box>
 			<Box sx={{ ...passwordRecoveryStyle.formPasswordR }}>
 				<SimpleForm
 					schema={{
@@ -65,11 +67,11 @@ export const PasswordRecovery = (props: IDefaultContainerProps) => {
 					onSubmit={handleSubmit}>
 					<TextField label="Email" icon="user" name="email" type="email" placeholder="Digite seu email" />
 					<Box sx={passwordRecoveryStyle.containerButtonOptions}>
-						<Button color={'primary'} onClick={() => navigate('/signin')}>
+						<Button color={'primary'} variant={'outlined'} onClick={() => navigate('/signin')}>
 							Voltar
 						</Button>
 						<Button id="submit" color={'primary'} variant={'outlined'}>
-							Recuperar a senha
+							Recuperar
 						</Button>
 					</Box>
 				</SimpleForm>

@@ -30,23 +30,34 @@ const UserProfileDetail = ({ screenState, loading, user, save, navigate, hiddenT
 				loading={loading}>
 				<ImageCompactField label={'Foto'} name={'photo'} />
 				<FormGroup>
-					<TextField placeholder="Nome do Usuário" name="username" />
-					<TextField placeholder="Email" name="email" />
-					<TextField placeholder="Telefone" name="phone" />
+					<TextField placeholder="Nome do Usuário" name="username" style={{ marginBottom: '10px' }} />
+					<TextField placeholder="Email" name="email" style={{ marginBottom: '10px' }} />
+					<TextField placeholder="Telefone" name="phone" style={{ marginBottom: '10px' }} />
 				</FormGroup>
-				<div key={'Buttons'} style={{ paddingTop: 20, paddingBottom: 20 }}>
-					<Button
-						onClick={
-							screenState === 'edit'
-								? () => navigate(`/userprofile/view/${user._id}`)
-								: !!hiddenTitleBar
-									? close
-									: () => navigate(`/userprofile/list`)
-						}
-						color={'secondary'}
-						variant="contained">
-						{screenState === 'view' ? 'Voltar' : 'Cancelar'}
-					</Button>
+				<div
+					key={'Buttons'}
+					style={{
+						paddingTop: 20,
+						paddingBottom: 20,
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center'
+					}}>
+					{screenState !== 'view' && (
+						<Button
+							sx={{ marginRight: '40px' }}
+							onClick={
+								screenState === 'edit'
+									? () => navigate(`/userprofile/view/${user._id}`)
+									: !!hiddenTitleBar
+										? close
+										: () => navigate(`/userprofile/list`)
+							}
+							color={'secondary'}
+							variant="contained">
+							{'Cancelar'}
+						</Button>
+					)}
 
 					{screenState === 'view' ? (
 						<Button onClick={() => navigate(`/userprofile/edit/${user._id}`)} color={'primary'} variant="contained">

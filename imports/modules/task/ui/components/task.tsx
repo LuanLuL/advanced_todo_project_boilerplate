@@ -1,8 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
+import { isMobile } from '/imports/libs/deviceVerify';
 import Typography from '@mui/material/Typography';
 import { taskStyles } from './styles/taskStyle';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
@@ -16,18 +17,27 @@ import { IUserProfile } from '/imports/userprofile/api/UserProfileSch';
 interface TypeTask {
 	task: ITask;
 	user: IUserProfile;
+	backRouter: string;
 	showNotification: (options?: Object | undefined) => void;
 	showDeleteDialog: (title: string, message: string, doc: Object, remove: (doc: any) => void) => void;
 	showDrawer: (options?: Object) => void;
 }
 
 export function Task({ task, user, showNotification, showDeleteDialog, showDrawer }: TypeTask) {
+	const navigate = useNavigate();
+
 	return (
 		<ListItem
 			sx={{ ...taskStyles.containerTask }}
 			key={'KEY' + task._id}
 			secondaryAction={
-				<InputOptions task={task} user={user} showNotification={showNotification} showDeleteDialog={showDeleteDialog} />
+				<InputOptions
+					showDrawer={showDrawer}
+					task={task}
+					user={user}
+					showNotification={showNotification}
+					showDeleteDialog={showDeleteDialog}
+				/>
 			}>
 			<ListItemAvatar key={task._id}>
 				{task.status ? (
@@ -52,7 +62,11 @@ export function Task({ task, user, showNotification, showDeleteDialog, showDrawe
 				primary={
 					<Typography
 						onClick={() => {
-							showDrawer && showDrawer({ url: `/task/view/${task._id}` });
+							if (isMobile) {
+								navigate(`/task/view/${task._id}`);
+							} else {
+								showDrawer && showDrawer({ url: `/task/view/${task._id}` });
+							}
 						}}
 						component="p"
 						sx={{

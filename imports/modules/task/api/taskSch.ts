@@ -19,7 +19,8 @@ export const taskSch = {
 	category: {
 		type: String,
 		label: 'Categoria',
-		optional: false,
+		optional: true,
+		defaultValue: 'Normal',
 		options: [
 			{ value: 'Normal', label: 'Normal' },
 			{ value: 'Pessoal', label: 'Pessoal' }

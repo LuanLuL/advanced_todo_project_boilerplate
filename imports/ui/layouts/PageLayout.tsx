@@ -25,7 +25,8 @@ export const PageLayout = (props: IPageLayout) => {
 				display: 'flex',
 				flexDirection: 'column',
 				overflowX: 'hidden',
-				maxHeight: '100%'
+				maxHeight: '100%',
+				padding: 0
 			}}>
 			<Box
 				sx={{
@@ -37,21 +38,10 @@ export const PageLayout = (props: IPageLayout) => {
 					overflowX: 'hidden',
 					overflowY: 'auto',
 					maxHeight: '100%',
-					position: 'relative'
+					position: 'relative',
+					padding: 0
 				}}>
-				<Container
-					id={'pageContainer'}
-					sx={{
-						display: 'flex',
-						flexDirection: 'column',
-						justifyContent: 'flex-start',
-						width: '100%',
-						flex: 1,
-						padding: 8,
-						backgroundColor: theme.palette.background.default
-					}}>
-					{children}
-				</Container>
+				{children}
 			</Box>
 		</Box>
 	);

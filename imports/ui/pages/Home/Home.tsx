@@ -46,7 +46,7 @@ export default function Home({ user, showNotification, showDeleteDialog, navigat
 				<Box component="div" sx={{ ...homeStyles.contentLabelHome }}>
 					<Typography sx={{ ...homeStyles.mainLabelHome }}>Olá, {user?.username}</Typography>
 					<Typography sx={{ ...homeStyles.descriptionLabelHome }}>
-						Seus projetos muito mais organizados. Veja as taefas adicionadas por seu time, por você e para você!
+						Seus projetos muito mais organizados. Veja as tarefas adicionadas por seu time, por você e para você!
 					</Typography>
 				</Box>
 				<Box component="div" sx={{ ...homeStyles.contentListHome }}>
@@ -73,7 +73,7 @@ export default function Home({ user, showNotification, showDeleteDialog, navigat
 					sx={{ ...homeStyles.routerNext }}
 					endIcon={<KeyboardDoubleArrowRightIcon fontSize="large" />}
 					onClick={() => navigate('/task')}>
-					Ir para Tarefas
+					Tarefas
 				</Button>
 			</Box>
 		</Box>

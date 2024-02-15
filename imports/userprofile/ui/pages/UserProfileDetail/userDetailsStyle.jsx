@@ -19,8 +19,8 @@ import { primary, secondary } from '../../../../../materialui/styles';
 
 const maxWidthSize = 600;
 
-const taskDetailStyles = {
-	containerTaskDetail: {
+const userDetailStyles = {
+	containerUserDetail: {
 		display: 'flex',
 		justifyContent: 'start',
 		flexDirection: 'column',
@@ -29,7 +29,7 @@ const taskDetailStyles = {
 		height: 'auto',
 		padding: '20px 10px 20px 10px'
 	},
-	subLabelTask: {
+	subLabelUser: {
 		textOverflow: 'ellipsis',
 		overflow: 'hidden',
 		width: '100%',
@@ -37,7 +37,7 @@ const taskDetailStyles = {
 		fontSize: '16px',
 		whiteSpace: 'nowrap'
 	},
-	contentLabelTaskDetail: {
+	contentLabelUserDetail: {
 		maxWidth: maxWidthSize,
 		width: '100%',
 		display: 'flex',
@@ -51,7 +51,7 @@ const taskDetailStyles = {
 		alignItems: 'center',
 		gap: '10px'
 	},
-	labelTaskDetail: {
+	labelUserDetail: {
 		whiteSpace: 'nowrap',
 		width: '200px',
 		overflow: 'hidden',
@@ -62,12 +62,12 @@ const taskDetailStyles = {
 		fontFamily: '"Roboto", sans-serif',
 		letterSpacing: '1.15px'
 	},
-	formTaskDetail: {
+	formUserDetail: {
 		textAlign: 'center',
 		width: '100%',
 		maxWidth: maxWidthSize
 	},
-	inputTaskDetail: {
+	inputUserDetail: {
 		marginBottom: '20px'
 	},
 	contentButton: {
@@ -76,7 +76,7 @@ const taskDetailStyles = {
 		alginItems: 'center',
 		width: '100%'
 	},
-	buttonTaskDetail: {
+	buttonUserDetail: {
 		textTransform: 'none',
 		textAlign: 'center',
 		fontSize: '18px',
@@ -118,4 +118,4 @@ const taskDetailStyles = {
 	}
 };
 
-export { taskDetailStyles };
+export { userDetailStyles };

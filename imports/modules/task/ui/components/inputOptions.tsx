@@ -9,15 +9,17 @@ import { taskApi } from '/imports/modules/task/api/taskApi';
 import Box from '@mui/material/Box';
 import { ITask } from '../../api/taskSch';
 import { IUserProfile } from '/imports/userprofile/api/UserProfileSch';
+import { isMobile } from '/imports/libs/deviceVerify';
 
 interface IInputOptions {
 	task: ITask;
 	user: IUserProfile;
+	showDrawer: (options?: Object) => void;
 	showNotification: (options?: Object | undefined) => void;
 	showDeleteDialog: (title: string, message: string, doc: Object, remove: (doc: any) => void) => void;
 }
 
-export function InputOptions({ showDeleteDialog, showNotification, user, task }: IInputOptions) {
+export function InputOptions({ showDrawer, showDeleteDialog, showNotification, user, task }: IInputOptions) {
 	const navigate = useNavigate();
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -71,7 +73,22 @@ export function InputOptions({ showDeleteDialog, showNotification, user, task }:
 				});
 			return;
 		}
-		navigate(`/task/edit/${doc._id}`);
+
+		if (doc.status === true) {
+			showNotification &&
+				showNotification({
+					type: 'warning',
+					title: 'A tarefa está concluída',
+					description: `É preciso reabrir a tarefa para poder edita-la.`
+				});
+			return;
+		}
+
+		if (isMobile) {
+			navigate(`/task/edit/${doc._id}`);
+		} else {
+			showDrawer && showDrawer({ url: `/task/edit/${doc._id}` });
+		}
 	}
 
 	function handleRemoveTask(doc: ITask) {
