@@ -53,8 +53,7 @@ export default function Home({ user, showNotification, showDeleteDialog, navigat
 					<Typography sx={{ ...homeStyles.subLabelHome }}>Adicionadas Recentemente</Typography>
 					<Divider />
 					{tasks.length === 0 ? (
-						<Typography sx={{ ...homeStyles.descriptionLabelHome, marginTop: '1rem' }}>
-							<Divider sx={{ marginBottom: '20px' }} />
+						<Typography sx={{ ...homeStyles.descriptionLabelHome, marginTop: '24px' }}>
 							Não há nenhuma tarefa adicionada recentemente.
 						</Typography>
 					) : (

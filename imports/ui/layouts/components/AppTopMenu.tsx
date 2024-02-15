@@ -30,9 +30,9 @@ export const AppTopMenu = (props: IAppTopMenu) => {
 	const viewProfile = () => {
 		handleClose();
 		if (isMobile) {
-			showWindow && showWindow({ title: 'Usuário', url: `/userprofile/view/${user._id}` });
+			navigate(`/userprofile/view/${user._id}`);
 		} else {
-			showDrawer && showDrawer({ title: 'Usuário', url: `/userprofile/view/${user._id}` });
+			showDrawer && showDrawer({ url: `/userprofile/view/${user._id}` });
 		}
 	};
 

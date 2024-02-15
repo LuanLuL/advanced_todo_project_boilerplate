@@ -15,7 +15,7 @@
  */
 
 import { isMobile } from '/imports/libs/deviceVerify';
-import { primary, secondary } from '../../../../../materialui/styles';
+import { primary, secondary } from '../../../../materialui/styles';
 
 const maxWidthSize = 600;
 
@@ -27,7 +27,8 @@ const userDetailStyles = {
 		alignItems: 'center',
 		width: '100%',
 		height: 'auto',
-		padding: '20px 10px 20px 10px'
+		padding: '20px 10px 20px 10px',
+		overflowY: 'scroll'
 	},
 	subLabelUser: {
 		textOverflow: 'ellipsis',
